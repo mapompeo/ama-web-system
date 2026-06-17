@@ -22,12 +22,26 @@ O sistema digitaliza os processos internos da ONG, centralizando o cadastro de v
 
 ```
 ama-web-system/
-├── database/
-│   └── schema.sql              # Script de criação das tabelas + dados iniciais
-├── docs/                       # Documentação institucional (PDF)
-├── public/
-│   ├── css/style.css
-│   └── js/main.js
+├── backend/                        # Servidor Node.js (Express)
+│   ├── database/
+│   │   └── schema.sql              # Script de criação das tabelas + dados iniciais
+│   ├── src/
+│   │   ├── config/database.js      # Pool de conexão MySQL
+│   │   ├── controllers/            # Lógica de negócio (Auth, Dashboard, CRUD)
+│   │   ├── middlewares/auth.js     # Proteção de rotas autenticadas
+│   │   ├── models/                 # Acesso ao banco (User, Volunteer, Beneficiary, Activity)
+│   │   ├── routes/                 # Rotas Express por módulo
+│   │   └── app.js                  # Ponto de entrada
+│   ├── .env.example
+│   └── package.json
+├── frontend/                       # Interface do usuário
+│   ├── public/
+│   │   ├── css/style.css
+│   │   └── js/main.js
+│   └── views/
+│       ├── partials/               # head.ejs, sidebar.ejs, alerts.ejs
+│       └── pages/                  # login, dashboard, volunteers, beneficiaries, activities
+├── docs/                           # Documentação institucional (PDF)
 ├── src/
 │   ├── config/database.js      # Pool de conexão MySQL
 │   ├── controllers/            # Lógica de negócio (Auth, Dashboard, CRUD)
@@ -61,6 +75,7 @@ cd ama-web-system
 ### 2. Instale as dependências
 
 ```bash
+cd backend
 npm install
 ```
 
@@ -85,14 +100,15 @@ SESSION_SECRET=troque_por_uma_chave_segura
 ### 4. Crie o banco de dados e popule
 
 ```bash
-mysql -u root -p < database/schema.sql
+mysql -u root -p < backend/database/schema.sql
 ```
 
-Ou execute o conteúdo de `database/schema.sql` diretamente no seu cliente MySQL (DBeaver, MySQL Workbench, etc.).
+Ou execute o conteúdo de `backend/database/schema.sql` diretamente no seu cliente MySQL (DBeaver, MySQL Workbench, etc.).
 
 ### 5. Inicie o servidor
 
 ```bash
+cd backend
 npm run dev     # desenvolvimento (nodemon, recarrega automaticamente)
 npm start       # produção
 ```
