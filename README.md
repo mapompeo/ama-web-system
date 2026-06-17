@@ -101,16 +101,6 @@ Acesse: **http://localhost:3000**
 
 ---
 
-## Usuário de Demonstração
-
-| Campo | Valor |
-|-------|-------|
-| E-mail | `admin@amaong.org` |
-| Senha | `admin123` |
-| Perfil | Administrador |
-
----
-
 ## Deploy (Produção)
 
 Hospedado em: **https://ama-app.onrender.com**
