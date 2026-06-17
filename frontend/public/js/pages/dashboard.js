@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
           y: { beginAtZero: true, ticks: { stepSize: 1, color: tickColor, font: { size: 11 } }, grid: { color: gridColor }, border: { display: false } },

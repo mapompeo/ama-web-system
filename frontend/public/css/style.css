@@ -413,6 +413,36 @@ body.sidebar-pinned main { margin-left: var(--sidebar-w); }
 .table-light { --bs-table-bg: var(--thead-bg) !important; }
 .table-light th { background: var(--thead-bg) !important; color: var(--thead-text) !important; }
 
+/* ── Dark mode: sobrescreve variáveis internas do Bootstrap para tabelas ── */
+[data-theme="dark"] .table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--text-body);
+  --bs-table-border-color: var(--border-light);
+  --bs-table-hover-bg: var(--table-hover);
+  --bs-table-hover-color: var(--text-body);
+  --bs-table-striped-bg: rgba(255,255,255,.03);
+  color: var(--text-body);
+}
+
+[data-theme="dark"] .table > :not(caption) > * > * {
+  background-color: var(--bs-table-bg, transparent);
+  color: var(--text-body);
+  border-bottom-color: var(--border-light);
+}
+
+[data-theme="dark"] .table-light {
+  --bs-table-bg: var(--thead-bg);
+  --bs-table-color: var(--thead-text);
+  --bs-table-border-color: var(--border);
+  color: var(--thead-text);
+}
+
+[data-theme="dark"] .table-light > * > * {
+  background-color: var(--thead-bg) !important;
+  color: var(--thead-text) !important;
+  border-color: var(--border);
+}
+
 /* ================================================================
    BADGES
    ================================================================ */
