@@ -1,13 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const auth = require('../middlewares/auth');
-const VolunteerController = require('../controllers/VolunteerController');
+const router = require('express').Router();
+const ctrl   = require('../controllers/VolunteerController');
 
-router.get('/', auth, VolunteerController.index);
-router.get('/new', auth, VolunteerController.newForm);
-router.post('/', auth, VolunteerController.create);
-router.get('/:id/edit', auth, VolunteerController.editForm);
-router.put('/:id', auth, VolunteerController.update);
-router.delete('/:id', auth, VolunteerController.delete);
+router.get('/',    ctrl.index);
+router.post('/',   ctrl.create);
+router.get('/:id', ctrl.show);
+router.put('/:id', ctrl.update);
+router.delete('/:id', ctrl.destroy);
 
 module.exports = router;

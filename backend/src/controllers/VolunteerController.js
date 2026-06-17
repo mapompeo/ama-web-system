@@ -1,55 +1,48 @@
 const Volunteer = require('../models/Volunteer');
 
-const VolunteerController = {
+module.exports = {
   async index(req, res) {
-    const volunteers = await Volunteer.findAll();
-    res.render('pages/volunteers/index', { title: 'Voluntários', volunteers });
+    try {
+      res.json(await Volunteer.findAll());
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao buscar voluntários.' });
+    }
   },
 
-  newForm(req, res) {
-    res.render('pages/volunteers/form', { title: 'Novo Voluntário', volunteer: null, action: '/volunteers', method: 'POST' });
+  async show(req, res) {
+    try {
+      const v = await Volunteer.findById(req.params.id);
+      if (!v) return res.status(404).json({ error: 'Não encontrado.' });
+      res.json(v);
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao buscar voluntário.' });
+    }
   },
 
   async create(req, res) {
     try {
-      await Volunteer.create(req.body);
-      req.flash('success', 'Voluntário cadastrado com sucesso!');
-      res.redirect('/volunteers');
+      const id = await Volunteer.create(req.body);
+      res.status(201).json(await Volunteer.findById(id));
     } catch (err) {
-      console.error(err);
-      req.flash('error', 'Erro ao cadastrar voluntário.');
-      res.redirect('/volunteers/new');
+      res.status(500).json({ error: 'Erro ao cadastrar voluntário.' });
     }
-  },
-
-  async editForm(req, res) {
-    const volunteer = await Volunteer.findById(req.params.id);
-    if (!volunteer) return res.redirect('/volunteers');
-    res.render('pages/volunteers/form', {
-      title: 'Editar Voluntário',
-      volunteer,
-      action: `/volunteers/${volunteer.id}?_method=PUT`,
-      method: 'POST'
-    });
   },
 
   async update(req, res) {
     try {
       await Volunteer.update(req.params.id, req.body);
-      req.flash('success', 'Voluntário atualizado com sucesso!');
-      res.redirect('/volunteers');
+      res.json(await Volunteer.findById(req.params.id));
     } catch (err) {
-      console.error(err);
-      req.flash('error', 'Erro ao atualizar voluntário.');
-      res.redirect(`/volunteers/${req.params.id}/edit`);
+      res.status(500).json({ error: 'Erro ao atualizar voluntário.' });
     }
   },
 
-  async delete(req, res) {
-    await Volunteer.delete(req.params.id);
-    req.flash('success', 'Voluntário removido.');
-    res.redirect('/volunteers');
+  async destroy(req, res) {
+    try {
+      await Volunteer.delete(req.params.id);
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao remover voluntário.' });
+    }
   }
 };
-
-module.exports = VolunteerController;

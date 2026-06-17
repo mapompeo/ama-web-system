@@ -9,9 +9,8 @@
    ================================================================ */
 :root {
   /* Brand */
-  --primary:       #16a34a;
-  --primary-dark:  #15803d;
-  --primary-light: #bbf7d0;
+  --primary:      #16a34a;
+  --primary-dark: #15803d;
 
   /* Layout */
   --sidebar-bg:    #0f172a;
@@ -281,7 +280,7 @@ main {
 
 body.sidebar-pinned main { margin-left: var(--sidebar-w); }
 
-.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
 .page-title  { font-size: 1.35rem; font-weight: 700; color: var(--text-heading); margin: 0; letter-spacing: -.02em; }
 
 /* ================================================================
@@ -402,6 +401,9 @@ body.sidebar-pinned main { margin-left: var(--sidebar-w); }
   border-color: var(--border);
   padding: .85rem 1rem;
   background: var(--thead-bg);
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 .table td {
   padding: .85rem 1rem;
@@ -412,6 +414,10 @@ body.sidebar-pinned main { margin-left: var(--sidebar-w); }
 .table-hover tbody tr:hover td { background: var(--table-hover); }
 .table-light { --bs-table-bg: var(--thead-bg) !important; }
 .table-light th { background: var(--thead-bg) !important; color: var(--thead-text) !important; }
+
+/* Links dentro de células de tabela sempre seguem a cor do tema */
+.table td a { color: var(--text-body); }
+.table td a:hover { color: var(--text-heading); }
 
 /* ── Dark mode: sobrescreve variáveis internas do Bootstrap para tabelas ── */
 [data-theme="dark"] .table {
@@ -570,6 +576,12 @@ body.sidebar-pinned main { margin-left: var(--sidebar-w); }
   height: 100vh; overflow: hidden;
   display: flex; flex-direction: column;
   padding: .75rem 1.5rem;
+}
+
+/* #content precisa ser flex container para repassar a altura ao table-card */
+.layout-table > #content {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
 }
 
 .layout-table .table-card { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }

@@ -25,7 +25,8 @@
     }
 
     .login-header {
-      background: linear-gradient(135deg, #0f172a 0%, #1a2e1a 100%);
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
       padding: 2rem 2rem 1.5rem;
       text-align: center;
     }
@@ -39,8 +40,8 @@
       margin-bottom: .85rem;
     }
 
-    .login-brand-title { font-family: Inter, sans-serif; font-weight: 700; color: #f8fafc; font-size: 1.35rem; letter-spacing: -.02em; margin: 0; }
-    .login-brand-sub   { color: #64748b; font-size: .78rem; margin: .2rem 0 0; }
+    .login-brand-title { font-family: Inter, sans-serif; font-weight: 700; color: var(--text-heading); font-size: 1.35rem; letter-spacing: -.02em; margin: 0; }
+    .login-brand-sub   { color: var(--text-muted); font-size: .78rem; margin: .2rem 0 0; }
 
     .login-body { padding: 1.75rem 2rem 2rem; }
 
@@ -74,7 +75,7 @@
   <div class="login-wrap">
     <!-- Card de login -->
     <div class="login-card">
-      <!-- Header sempre escuro com o brand -->
+      <!-- Header do brand (segue o tema) -->
       <div class="login-header">
         <div class="login-brand-icon"><i class="bi bi-heart-fill"></i></div>
         <h1 class="login-brand-title">AMA ONG</h1>

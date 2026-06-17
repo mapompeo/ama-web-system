@@ -1,55 +1,48 @@
 const Activity = require('../models/Activity');
 
-const ActivityController = {
+module.exports = {
   async index(req, res) {
-    const activities = await Activity.findAll();
-    res.render('pages/activities/index', { title: 'Atividades', activities });
+    try {
+      res.json(await Activity.findAll());
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao buscar atividades.' });
+    }
   },
 
-  newForm(req, res) {
-    res.render('pages/activities/form', { title: 'Nova Atividade', activity: null, action: '/activities', method: 'POST' });
+  async show(req, res) {
+    try {
+      const a = await Activity.findById(req.params.id);
+      if (!a) return res.status(404).json({ error: 'Não encontrada.' });
+      res.json(a);
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao buscar atividade.' });
+    }
   },
 
   async create(req, res) {
     try {
-      await Activity.create(req.body);
-      req.flash('success', 'Atividade criada com sucesso!');
-      res.redirect('/activities');
+      const id = await Activity.create(req.body);
+      res.status(201).json(await Activity.findById(id));
     } catch (err) {
-      console.error(err);
-      req.flash('error', 'Erro ao criar atividade.');
-      res.redirect('/activities/new');
+      res.status(500).json({ error: 'Erro ao cadastrar atividade.' });
     }
-  },
-
-  async editForm(req, res) {
-    const activity = await Activity.findById(req.params.id);
-    if (!activity) return res.redirect('/activities');
-    res.render('pages/activities/form', {
-      title: 'Editar Atividade',
-      activity,
-      action: `/activities/${activity.id}?_method=PUT`,
-      method: 'POST'
-    });
   },
 
   async update(req, res) {
     try {
       await Activity.update(req.params.id, req.body);
-      req.flash('success', 'Atividade atualizada com sucesso!');
-      res.redirect('/activities');
+      res.json(await Activity.findById(req.params.id));
     } catch (err) {
-      console.error(err);
-      req.flash('error', 'Erro ao atualizar atividade.');
-      res.redirect(`/activities/${req.params.id}/edit`);
+      res.status(500).json({ error: 'Erro ao atualizar atividade.' });
     }
   },
 
-  async delete(req, res) {
-    await Activity.delete(req.params.id);
-    req.flash('success', 'Atividade removida.');
-    res.redirect('/activities');
+  async destroy(req, res) {
+    try {
+      await Activity.delete(req.params.id);
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao remover atividade.' });
+    }
   }
 };
-
-module.exports = ActivityController;

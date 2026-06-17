@@ -49,7 +49,7 @@
           <ul class="nav flex-column">
             <li><a href="/dashboard"      class="nav-link ${active('dashboard')}"><i class="bi bi-speedometer2"></i><span class="nav-text">Dashboard</span></a></li>
             <li><a href="/volunteers"     class="nav-link ${active('volunteer')}"><i class="bi bi-people"></i><span class="nav-text">Voluntários</span></a></li>
-            <li><a href="/beneficiaries"  class="nav-link ${active('beneficiar')}"><i class="bi bi-person-heart"></i><span class="nav-text">Atendidos</span></a></li>
+            <li><a href="/beneficiaries"  class="nav-link ${active('beneficiar')}"><i class="bi bi-hearts"></i><span class="nav-text">Animais</span></a></li>
             <li><a href="/activities"     class="nav-link ${active('activit')}"><i class="bi bi-calendar-event"></i><span class="nav-text">Atividades</span></a></li>
           </ul>
         </div>
@@ -75,7 +75,7 @@
         <ul class="nav flex-column">
           <li><a href="/dashboard"     class="nav-link ${active('dashboard')}" title="Dashboard"><i class="bi bi-speedometer2"></i><span class="nav-text">Dashboard</span></a></li>
           <li><a href="/volunteers"    class="nav-link ${active('volunteer')}" title="Voluntários"><i class="bi bi-people"></i><span class="nav-text">Voluntários</span></a></li>
-          <li><a href="/beneficiaries" class="nav-link ${active('beneficiar')}" title="Atendidos"><i class="bi bi-person-heart"></i><span class="nav-text">Atendidos</span></a></li>
+          <li><a href="/beneficiaries" class="nav-link ${active('beneficiar')}" title="Animais"><i class="bi bi-hearts"></i><span class="nav-text">Animais</span></a></li>
           <li><a href="/activities"    class="nav-link ${active('activit')}" title="Atividades"><i class="bi bi-calendar-event"></i><span class="nav-text">Atividades</span></a></li>
         </ul>
       </div>
