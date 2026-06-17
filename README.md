@@ -1,8 +1,6 @@
 # AMA Web System
 
-Sistema web desenvolvido para a **Associação Palmira Gobbi Amigo dos Amigos (AMA ONG)** como projeto de extensão universitária — disciplina de **Programação Web**, Ciência da Computação, Univali (2025/1).
-
-O sistema digitaliza os processos internos da ONG, centralizando o cadastro de voluntários, atendidos e atividades em uma plataforma acessível pelo navegador.
+Sistema web desenvolvido para a **Associação Palmira Gobbi Amigo dos Amigos (AMA ONG)** — digitaliza o cadastro de voluntários, animais e atividades em uma plataforma acessível pelo navegador.
 
 ---
 
@@ -10,11 +8,11 @@ O sistema digitaliza os processos internos da ONG, centralizando o cadastro de v
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Frontend | HTML5, CSS3, Bootstrap 5, Bootstrap Icons, EJS |
-| Backend | Node.js 18+ + Express 4 |
-| Banco de Dados | MySQL 8 |
-| Autenticação | Sessão + bcrypt |
-| Arquitetura | MVC (Model-View-Controller) |
+| Frontend | HTML5, CSS3, Bootstrap 5, Bootstrap Icons |
+| Backend | Node.js 18+ / Express 4 |
+| Banco de Dados | PostgreSQL (Supabase) |
+| Autenticação | JWT + bcrypt |
+| Deploy | Render |
 
 ---
 
@@ -22,38 +20,28 @@ O sistema digitaliza os processos internos da ONG, centralizando o cadastro de v
 
 ```
 ama-web-system/
-├── backend/                        # Servidor Node.js (Express)
+├── backend/
 │   ├── database/
-│   │   └── schema.sql              # Script de criação das tabelas + dados iniciais
+│   │   ├── schema.pg.sql       # Criação das tabelas (PostgreSQL)
+│   │   └── seed.pg.sql         # Dados realistas (50+ registros por tabela)
 │   ├── src/
-│   │   ├── config/database.js      # Pool de conexão MySQL
-│   │   ├── controllers/            # Lógica de negócio (Auth, Dashboard, CRUD)
-│   │   ├── middlewares/auth.js     # Proteção de rotas autenticadas
-│   │   ├── models/                 # Acesso ao banco (User, Volunteer, Beneficiary, Activity)
-│   │   ├── routes/                 # Rotas Express por módulo
-│   │   └── app.js                  # Ponto de entrada
+│   │   ├── config/database.js  # Pool de conexão PostgreSQL
+│   │   ├── controllers/        # Lógica de negócio
+│   │   ├── middlewares/auth.js # Proteção de rotas (JWT)
+│   │   ├── models/             # Acesso ao banco
+│   │   ├── routes/             # Rotas Express
+│   │   └── app.js              # Ponto de entrada
+│   ├── uploads/                # Fotos dos animais
 │   ├── .env.example
 │   └── package.json
-├── frontend/                       # Interface do usuário
+├── frontend/
 │   ├── public/
 │   │   ├── css/style.css
-│   │   └── js/main.js
-│   └── views/
-│       ├── partials/               # head.ejs, sidebar.ejs, alerts.ejs
-│       └── pages/                  # login, dashboard, volunteers, beneficiaries, activities
-├── docs/                           # Documentação institucional (PDF)
-├── src/
-│   ├── config/database.js      # Pool de conexão MySQL
-│   ├── controllers/            # Lógica de negócio (Auth, Dashboard, CRUD)
-│   ├── middlewares/auth.js     # Proteção de rotas autenticadas
-│   ├── models/                 # Acesso ao banco (User, Volunteer, Beneficiary, Activity)
-│   ├── routes/                 # Rotas Express por módulo
-│   └── app.js                  # Ponto de entrada
-├── views/
-│   ├── partials/               # head.ejs, sidebar.ejs, alerts.ejs
-│   └── pages/                  # login, dashboard, volunteers, beneficiaries, activities
-├── .env.example
-└── package.json
+│   │   ├── js/
+│   │   ├── images/             # Logos, favicon
+│   │   └── ...html             # Todas as páginas
+│   └── 404.html
+└── README.md
 ```
 
 ---
@@ -63,7 +51,7 @@ ama-web-system/
 ### Pré-requisitos
 
 - Node.js 18+
-- MySQL 8+
+- PostgreSQL (ou conta no Supabase/Neon)
 
 ### 1. Clone o repositório
 
@@ -85,32 +73,28 @@ npm install
 cp .env.example .env
 ```
 
-Edite o `.env` com seus dados:
+Edite o `.env`:
 
 ```env
 PORT=3000
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=sua_senha
-DB_NAME=ama_db
-SESSION_SECRET=troque_por_uma_chave_segura
+DATABASE_URL=postgresql://usuario:senha@host:5432/postgres
+NODE_ENV=development
+JWT_SECRET=uma_chave_segura_aqui
 ```
 
 ### 4. Crie o banco de dados e popule
 
-```bash
-mysql -u root -p < backend/database/schema.sql
-```
+Execute no SQL Editor do Supabase (ou via psql):
 
-Ou execute o conteúdo de `backend/database/schema.sql` diretamente no seu cliente MySQL (DBeaver, MySQL Workbench, etc.).
+1. `backend/database/schema.pg.sql` — cria as tabelas + admin
+2. `backend/database/seed.pg.sql` — dados completos (opcional)
 
 ### 5. Inicie o servidor
 
 ```bash
 cd backend
-npm run dev     # desenvolvimento (nodemon, recarrega automaticamente)
-npm start       # produção
+npm run dev    # desenvolvimento (nodemon)
+npm start      # produção
 ```
 
 Acesse: **http://localhost:3000**
@@ -122,74 +106,70 @@ Acesse: **http://localhost:3000**
 | Campo | Valor |
 |-------|-------|
 | E-mail | `admin@amaong.org` |
-| Senha | `password` |
+| Senha | `admin123` |
 | Perfil | Administrador |
-
----
-
-## Banco de Dados
-
-O arquivo `database/schema.sql` cria automaticamente:
-
-- Banco `ama_db`
-- Tabelas: `users`, `volunteers`, `beneficiaries`, `activities`
-- Dados iniciais: 1 usuário admin, 3 voluntários, 2 atendidos e 2 atividades de exemplo
 
 ---
 
 ## Deploy (Produção)
 
-Sistema hospedado em: **[em breve — adicionar link após deploy]**
+Hospedado em: **https://ama-app.onrender.com**
 
-### Opção recomendada: Railway
+### Configuração no Render
 
-O Railway suporta Node.js + MySQL gratuitamente em um único projeto:
+| Parâmetro | Valor |
+|-----------|-------|
+| Root Directory | `backend` |
+| Build Command | `npm install` |
+| Start Command | `node src/app.js` |
 
-1. Crie uma conta em [railway.app](https://railway.app)
-2. Novo projeto → "Deploy from GitHub repo" → selecione este repositório
-3. Adicione um serviço MySQL no mesmo projeto
-4. Configure as variáveis de ambiente (mesmo conteúdo do `.env`)
-5. Execute o `schema.sql` no banco do Railway para criar as tabelas
+### Variáveis de Ambiente no Render
+
+| Chave | Valor |
+|-------|-------|
+| `DATABASE_URL` | Connection string do Supabase (Session Pooler) |
+| `NODE_ENV` | `production` |
+| `JWT_SECRET` | Chave secreta aleatória |
 
 ---
 
 ## Funcionalidades
 
-- Login e logout com sessão segura
+- Login e logout com JWT
 - Dashboard com estatísticas em tempo real
 - **Voluntários** — cadastro, edição, listagem e remoção
-- **Atendidos** — cadastro, edição, listagem e remoção
+- **Animais** — cadastro, edição, listagem e remoção com fotos
+- **Histórico clínico** — registro de procedimentos por animal
 - **Atividades** — cadastro, edição, listagem e remoção
-- Alertas de sucesso/erro em todas as operações
+- Tema claro/escuro com persistência
 - Interface responsiva (Bootstrap 5)
+- Logos e favicon personalizados
 
 ---
 
 ## Segurança
 
 - Senhas armazenadas com **bcrypt** (salt rounds: 10)
-- Proteção contra **SQL Injection** via queries parametrizadas (mysql2)
-- Rotas protegidas por middleware de sessão
+- Proteção contra **SQL Injection** via queries parametrizadas
+- Rotas protegidas por middleware JWT
 - Variáveis sensíveis via `.env` (nunca commitadas)
+- Rate limiting no login (10 tentativas / 15 min)
 
 ---
 
 ## Equipe
 
-| Nome | Função | Contato |
-|------|--------|---------|
-| José Gabriel Santos Gomes | Desenvolvedor Fullstack | jose.8540691@edu.univali.br |
-| Kaio Otavio de Oliveira Situlino | UI/UX Design e Front-end | kaio.7794665@edu.univali.br |
-| Matheus Pompeo Dias | Desenvolvedor Fullstack | matheus.8541795@edu.univali.br |
-| Nathan Reichert | Banco de Dados e Documentação | nathan.8533741@edu.univali.br |
+| Nome | Função |
+|------|--------|
+| José Gabriel Santos Gomes | Desenvolvedor Fullstack |
+| Kaio Otavio de Oliveira Situlino | UI/UX Design e Front-end |
+| Matheus Pompeo Dias | Desenvolvedor Fullstack |
+| Nathan Reichert | Banco de Dados e Documentação |
 
-**Orientador:** Prof. Dr. Jhonatan Alves — jhonatan.alves@univali.br
+**Orientador:** Prof. Dr. Jhonatan Alves
 
 ---
 
 ## Documentação
 
-A pasta [`docs/`](./docs/) contém:
-
-- `relatorio_de_extensao.pdf` — Relatório do projeto de extensão
-- `carta_de_apresentacao_e_aceite.pdf` — Carta de aceite assinada pela AMA ONG
+A pasta [`docs/`](./docs/) contém os relatórios e cartas do projeto de extensão.
