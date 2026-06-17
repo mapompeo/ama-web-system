@@ -608,6 +608,7 @@ body.sidebar-pinned main { margin-left: var(--sidebar-w); }
    ================================================================ */
 
 .text-muted { color: var(--text-muted) !important; }
+.text-body  { color: var(--text-body) !important; }
 .text-dark  { color: var(--text-heading) !important; }
 .toast-container { z-index: 9999; }
 
