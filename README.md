@@ -1,6 +1,10 @@
 # AMA Web System
 
+[![AMA Web System](/frontend/public/images/screenshot-main.png)](https://ama-web-system.onrender.com/)
+
 Sistema web desenvolvido para a **Associação Palmira Gobbi Amigo dos Amigos (AMA ONG)** — digitaliza o cadastro de voluntários, animais e atividades em uma plataforma acessível pelo navegador.
+
+**Acesse:** [https://ama-web-system.onrender.com/](https://ama-web-system.onrender.com/)
 
 ---
 
@@ -103,7 +107,7 @@ Acesse: **http://localhost:3000**
 
 ## Deploy (Produção)
 
-Hospedado em: **https://ama-app.onrender.com**
+Hospedado em: **[https://ama-web-system.onrender.com/](https://ama-web-system.onrender.com/)**
 
 ### Configuração no Render
 
