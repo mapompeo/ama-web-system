@@ -1,8 +1,8 @@
 # AMA Web System
 
-Sistema web desenvolvido para a **Associação Palmira Gobbi Amigo dos Amigos (AMA ONG)** como projeto de extensão universitária, na disciplina de **Programação Web** — Ciência da Computação, Univali.
+Sistema web desenvolvido para a **Associação Palmira Gobbi Amigo dos Amigos (AMA ONG)** como projeto de extensão universitária — disciplina de **Programação Web**, Ciência da Computação, Univali (2025/1).
 
-O sistema digitaliza os processos internos da ONG, aumenta sua visibilidade digital e facilita a comunicação com a comunidade atendida.
+O sistema digitaliza os processos internos da ONG, centralizando o cadastro de voluntários, atendidos e atividades em uma plataforma acessível pelo navegador.
 
 ---
 
@@ -10,10 +10,10 @@ O sistema digitaliza os processos internos da ONG, aumenta sua visibilidade digi
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Frontend | HTML5, CSS3, Bootstrap 5, JavaScript ES6+ |
-| Backend | Node.js + Express |
-| Banco de Dados | MySQL |
-| Autenticação | JWT + express-session |
+| Frontend | HTML5, CSS3, Bootstrap 5, Bootstrap Icons, EJS |
+| Backend | Node.js 18+ + Express 4 |
+| Banco de Dados | MySQL 8 |
+| Autenticação | Sessão + bcrypt |
 | Arquitetura | MVC (Model-View-Controller) |
 
 ---
@@ -22,24 +22,23 @@ O sistema digitaliza os processos internos da ONG, aumenta sua visibilidade digi
 
 ```
 ama-web-system/
-├── docs/                          # Documentação institucional (relatório, carta de aceite)
+├── database/
+│   └── schema.sql              # Script de criação das tabelas + dados iniciais
+├── docs/                       # Documentação institucional (PDF)
 ├── public/
-│   ├── css/                       # Estilos globais
-│   ├── js/                        # Scripts do cliente
-│   └── images/                    # Imagens e assets
+│   ├── css/style.css
+│   └── js/main.js
 ├── src/
-│   ├── config/
-│   │   └── database.js            # Configuração do pool MySQL
-│   ├── controllers/               # Lógica de negócio por módulo
-│   ├── middlewares/
-│   │   └── auth.js                # Verificação de JWT/sessão
-│   ├── models/                    # Acesso ao banco de dados
-│   ├── routes/                    # Definição das rotas Express
-│   └── app.js                     # Ponto de entrada da aplicação
+│   ├── config/database.js      # Pool de conexão MySQL
+│   ├── controllers/            # Lógica de negócio (Auth, Dashboard, CRUD)
+│   ├── middlewares/auth.js     # Proteção de rotas autenticadas
+│   ├── models/                 # Acesso ao banco (User, Volunteer, Beneficiary, Activity)
+│   ├── routes/                 # Rotas Express por módulo
+│   └── app.js                  # Ponto de entrada
 ├── views/
-│   ├── pages/                     # Páginas HTML
-│   └── partials/                  # Componentes reutilizáveis (navbar, footer)
-├── .env.example                   # Variáveis de ambiente necessárias
+│   ├── partials/               # head.ejs, sidebar.ejs, alerts.ejs
+│   └── pages/                  # login, dashboard, volunteers, beneficiaries, activities
+├── .env.example
 └── package.json
 ```
 
@@ -47,36 +46,115 @@ ama-web-system/
 
 ## Como Rodar Localmente
 
-**Pré-requisitos:** Node.js 18+, MySQL 8+
+### Pré-requisitos
+
+- Node.js 18+
+- MySQL 8+
+
+### 1. Clone o repositório
 
 ```bash
-# 1. Clone o repositório
 git clone https://github.com/mapompeo/ama-web-system.git
 cd ama-web-system
+```
 
-# 2. Instale as dependências
+### 2. Instale as dependências
+
+```bash
 npm install
+```
 
-# 3. Configure as variáveis de ambiente
+### 3. Configure as variáveis de ambiente
+
+```bash
 cp .env.example .env
-# edite o .env com seus dados de banco e chaves secretas
+```
 
-# 4. Inicie o servidor
-npm run dev     # desenvolvimento (nodemon)
+Edite o `.env` com seus dados:
+
+```env
+PORT=3000
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=sua_senha
+DB_NAME=ama_db
+SESSION_SECRET=troque_por_uma_chave_segura
+```
+
+### 4. Crie o banco de dados e popule
+
+```bash
+mysql -u root -p < database/schema.sql
+```
+
+Ou execute o conteúdo de `database/schema.sql` diretamente no seu cliente MySQL (DBeaver, MySQL Workbench, etc.).
+
+### 5. Inicie o servidor
+
+```bash
+npm run dev     # desenvolvimento (nodemon, recarrega automaticamente)
 npm start       # produção
 ```
 
-O servidor estará disponível em `http://localhost:3000`.
+Acesse: **http://localhost:3000**
+
+---
+
+## Usuário de Demonstração
+
+| Campo | Valor |
+|-------|-------|
+| E-mail | `admin@amaong.org` |
+| Senha | `password` |
+| Perfil | Administrador |
+
+---
+
+## Banco de Dados
+
+O arquivo `database/schema.sql` cria automaticamente:
+
+- Banco `ama_db`
+- Tabelas: `users`, `volunteers`, `beneficiaries`, `activities`
+- Dados iniciais: 1 usuário admin, 3 voluntários, 2 atendidos e 2 atividades de exemplo
+
+---
+
+## Deploy (Produção)
+
+Sistema hospedado em: **[em breve — adicionar link após deploy]**
+
+### Opção recomendada: Railway
+
+O Railway suporta Node.js + MySQL gratuitamente em um único projeto:
+
+1. Crie uma conta em [railway.app](https://railway.app)
+2. Novo projeto → "Deploy from GitHub repo" → selecione este repositório
+3. Adicione um serviço MySQL no mesmo projeto
+4. Configure as variáveis de ambiente (mesmo conteúdo do `.env`)
+5. Execute o `schema.sql` no banco do Railway para criar as tabelas
+
+---
+
+## Funcionalidades
+
+- Login e logout com sessão segura
+- Dashboard com estatísticas em tempo real
+- **Voluntários** — cadastro, edição, listagem e remoção
+- **Atendidos** — cadastro, edição, listagem e remoção
+- **Atividades** — cadastro, edição, listagem e remoção
+- Alertas de sucesso/erro em todas as operações
+- Interface responsiva (Bootstrap 5)
 
 ---
 
 ## Segurança
 
-- Autenticação via **JWT** com expiração de 8h
 - Senhas armazenadas com **bcrypt** (salt rounds: 10)
 - Proteção contra **SQL Injection** via queries parametrizadas (mysql2)
-- Validação e sanitização de inputs no backend
-- Comunicação via **HTTPS** em produção
+- Rotas protegidas por middleware de sessão
+- Variáveis sensíveis via `.env` (nunca commitadas)
 
 ---
 
@@ -97,11 +175,5 @@ O servidor estará disponível em `http://localhost:3000`.
 
 A pasta [`docs/`](./docs/) contém:
 
-- `relatorio_de_extensao.pdf` — Relatório do projeto de extensão (Univali)
+- `relatorio_de_extensao.pdf` — Relatório do projeto de extensão
 - `carta_de_apresentacao_e_aceite.pdf` — Carta de aceite assinada pela AMA ONG
-
----
-
-## Licença
-
-MIT — livre para uso, modificação e distribuição.
