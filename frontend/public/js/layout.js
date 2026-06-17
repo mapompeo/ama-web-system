@@ -1,6 +1,6 @@
 /* Injeta sidebar + checa auth em todas as páginas protegidas */
 (async function () {
-  if (window.location.pathname === '/login.html' || window.location.pathname === '/') return;
+  if (window.location.pathname === '/login.html' || window.location.pathname === '/login' || window.location.pathname === '/') return;
 
   let user;
   try {
@@ -10,7 +10,7 @@
     });
     user = data.user;
   } catch {
-    window.location.href = '/login.html';
+    window.location.href = '/login';
     return;
   }
 
@@ -24,9 +24,14 @@
         <div class="sidebar-brand-icon" style="width:28px;height:28px;font-size:.8rem;border-radius:7px"><i class="bi bi-heart-fill"></i></div>
         <span style="font-size:.9rem;font-weight:700">AMA ONG</span>
       </a>
-      <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
-        <i class="bi bi-list fs-4"></i>
-      </button>
+      <div class="d-flex align-items-center gap-2">
+        <button id="themeToggleMobile" class="sidebar-theme border-0 bg-transparent p-1" title="Alternar tema">
+          <i id="themeIconMobile" class="bi bi-moon" style="font-size:1.1rem"></i>
+        </button>
+        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+          <i class="bi bi-list fs-4"></i>
+        </button>
+      </div>
     </nav>
 
     <!-- Offcanvas mobile -->
@@ -77,6 +82,7 @@
       <div class="sidebar-footer">
         <div class="sidebar-avatar"><i class="bi bi-person-fill"></i></div>
         <span class="sidebar-user-name">${user.name}</span>
+        <button id="themeToggle" class="sidebar-theme border-0 bg-transparent" title="Alternar tema"><i id="themeIcon" class="bi bi-moon"></i></button>
         <button onclick="doLogout()" class="sidebar-logout border-0 bg-transparent" title="Sair"><i class="bi bi-box-arrow-right"></i></button>
       </div>
     </nav>
@@ -84,7 +90,7 @@
 
   document.body.insertAdjacentHTML('afterbegin', html);
 
-  // Pin button
+  // ── Sidebar pin ──────────────────────────────────────────────
   const STORAGE_KEY = 'ama-sidebar-pinned';
   if (localStorage.getItem(STORAGE_KEY) !== '0') document.body.classList.add('sidebar-pinned');
 
@@ -103,9 +109,40 @@
     localStorage.setItem(STORAGE_KEY, pinned ? '1' : '0');
     updatePinIcon();
   });
+
+  // ── Theme toggle ──────────────────────────────────────────────
+  syncThemeIcons();
+
+  document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+  document.getElementById('themeToggleMobile')?.addEventListener('click', toggleTheme);
 })();
+
+// ── Funções globais ───────────────────────────────────────────────
 
 async function doLogout() {
   await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-  window.location.href = '/login.html';
+  window.location.href = '/login';
+}
+
+function applyTheme(theme) {
+  // Adiciona classe de transição apenas durante a troca
+  document.documentElement.classList.add('theme-transitioning');
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('ama-theme', theme);
+  syncThemeIcons();
+  setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 300);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
+function syncThemeIcons() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const cls = isDark ? 'bi bi-sun' : 'bi bi-moon';
+  const desktopIcon = document.getElementById('themeIcon');
+  const mobileIcon  = document.getElementById('themeIconMobile');
+  if (desktopIcon) desktopIcon.className = cls;
+  if (mobileIcon)  mobileIcon.className  = cls + ' ';
 }

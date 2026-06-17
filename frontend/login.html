@@ -2,57 +2,114 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>!function(){var t=localStorage.getItem('ama-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)}()</script>
   <title>Login — AMA ONG</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .login-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a2f 100%);
+      min-height: 100vh; display: flex; align-items: center;
+      justify-content: center; padding: 1rem;
+    }
+    [data-theme="dark"] .login-card {
+      background: #161b22 !important;
+      border: 1px solid #30363d !important;
+    }
+    [data-theme="dark"] .login-card h3,
+    [data-theme="dark"] .login-card p { color: #c9d1d9 !important; }
+    [data-theme="dark"] .login-card h3 { color: #f0f6fc !important; }
+    [data-theme="dark"] .login-footer { color: #8b949e !important; }
+
+    .theme-btn-float {
+      position: fixed; top: 1rem; right: 1rem;
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #94a3b8; font-size: 1rem;
+      cursor: pointer; transition: background .15s, color .15s;
+    }
+    .theme-btn-float:hover { background: rgba(255,255,255,.18); color: #f1f5f9; }
+  </style>
 </head>
-<body style="background:linear-gradient(135deg,#0f172a 0%,#1e3a2f 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem">
-  <div style="width:100%;max-width:400px">
-    <div class="text-center mb-4">
-      <div style="display:inline-flex;width:60px;height:60px;background:linear-gradient(135deg,#16a34a,#22c55e);border-radius:18px;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;box-shadow:0 8px 24px rgba(22,163,74,.4);margin-bottom:1rem">
-        <i class="bi bi-heart-fill"></i>
+<body>
+  <!-- Botão de tema flutuante -->
+  <button id="themeToggle" class="theme-btn-float" title="Alternar tema">
+    <i id="themeIcon" class="bi bi-moon"></i>
+  </button>
+
+  <div class="login-bg">
+    <div style="width:100%;max-width:400px">
+      <div class="text-center mb-4">
+        <div style="display:inline-flex;width:60px;height:60px;background:linear-gradient(135deg,#16a34a,#22c55e);border-radius:18px;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;box-shadow:0 8px 24px rgba(22,163,74,.4);margin-bottom:1rem">
+          <i class="bi bi-heart-fill"></i>
+        </div>
+        <h2 style="font-family:Inter,sans-serif;font-weight:700;color:#f8fafc;font-size:1.4rem;letter-spacing:-.02em;margin:0">AMA ONG</h2>
+        <p style="color:#64748b;font-size:.8rem;margin:.25rem 0 0">Associação Palmira Gobbi Amigo dos Amigos</p>
       </div>
-      <h2 style="font-family:Inter,sans-serif;font-weight:700;color:#f8fafc;font-size:1.4rem;letter-spacing:-.02em;margin:0">AMA ONG</h2>
-      <p style="color:#64748b;font-size:.8rem;margin:.25rem 0 0">Associação Palmira Gobbi Amigo dos Amigos</p>
-    </div>
-    <div style="background:#fff;border-radius:18px;padding:2rem;box-shadow:0 24px 60px rgba(0,0,0,.3)">
-      <h3 style="font-family:Inter,sans-serif;font-weight:600;color:#0f172a;font-size:1.1rem;margin:0 0 .25rem">Entrar na sua conta</h3>
-      <p style="color:#64748b;font-size:.8rem;margin:0 0 1.5rem">Digite suas credenciais para acessar o sistema</p>
-      <div id="alert-container"></div>
-      <form id="login-form" novalidate>
-        <div class="mb-3">
-          <label class="form-label">E-mail</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-            <input type="email" class="form-control" id="email" placeholder="seu@email.com" required autofocus />
+      <div class="login-card" style="background:#fff;border-radius:18px;padding:2rem;box-shadow:0 24px 60px rgba(0,0,0,.3)">
+        <h3 style="font-family:Inter,sans-serif;font-weight:600;color:#0f172a;font-size:1.1rem;margin:0 0 .25rem">Entrar na sua conta</h3>
+        <p style="color:#64748b;font-size:.8rem;margin:0 0 1.5rem">Digite suas credenciais para acessar o sistema</p>
+        <div id="alert-container"></div>
+        <form id="login-form" novalidate>
+          <div class="mb-3">
+            <label class="form-label">E-mail</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control" id="email" placeholder="seu@email.com" required autofocus />
+            </div>
           </div>
-        </div>
-        <div class="mb-4">
-          <label class="form-label">Senha</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <input type="password" class="form-control" id="password" placeholder="••••••••" required />
+          <div class="mb-4">
+            <label class="form-label">Senha</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" class="form-control" id="password" placeholder="••••••••" required />
+            </div>
           </div>
-        </div>
-        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
-          <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
-        </button>
-      </form>
+          <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
+          </button>
+        </form>
+      </div>
+      <p class="login-footer text-center mt-3" style="color:#475569;font-size:.75rem">Sistema de Gestão — AMA ONG &copy; 2026</p>
     </div>
-    <p class="text-center mt-3" style="color:#334155;font-size:.75rem">Sistema de Gestão — AMA ONG &copy; 2026</p>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // Redireciona se já autenticado
     fetch('/api/auth/me', { credentials: 'include' }).then(r => { if (r.ok) window.location.href = '/dashboard'; });
 
+    // ── Tema ─────────────────────────────────────────────────────
+    function applyTheme(theme) {
+      document.documentElement.classList.add('theme-transitioning');
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('ama-theme', theme);
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = theme === 'dark' ? 'bi bi-sun' : 'bi bi-moon';
+      setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 300);
+    }
+
+    // Sincroniza ícone com tema atual
+    (function() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.getElementById('themeIcon').className = isDark ? 'bi bi-sun' : 'bi bi-moon';
+    })();
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // ── Login ─────────────────────────────────────────────────────
     document.getElementById('login-form').addEventListener('submit', async e => {
       e.preventDefault();
       const btn = e.target.querySelector('[type=submit]');
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Entrando...';
-
       try {
         const res = await fetch('/api/auth/login', {
           method: 'POST', credentials: 'include',
