@@ -469,6 +469,62 @@ body.sidebar-pinned main { margin-left: var(--sidebar-w); }
 .page-item.disabled .page-link { background: var(--card-bg); color: var(--text-subtle); border-color: var(--border); }
 
 /* ================================================================
+   DASHBOARD — QUICK ACTIONS
+   ================================================================ */
+
+.quick-action-btn {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .65rem .85rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: .85rem; font-weight: 500;
+  color: var(--text-body);
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  transition: background .15s, border-color .15s, transform .15s, box-shadow .15s;
+}
+.quick-action-btn:hover {
+  transform: translateX(3px);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-body);
+}
+.quick-action-btn > i:first-child {
+  width: 34px; height: 34px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+.quick-action-btn.green > i:first-child { background: #dcfce7; color: #16a34a; }
+.quick-action-btn.blue  > i:first-child { background: #dbeafe; color: #2563eb; }
+.quick-action-btn.amber > i:first-child { background: #fef3c7; color: #d97706; }
+
+.quick-action-btn:hover.green { border-color: #86efac; background: #f0fdf4; }
+.quick-action-btn:hover.blue  { border-color: #93c5fd; background: #eff6ff; }
+.quick-action-btn:hover.amber { border-color: #fcd34d; background: #fffbeb; }
+
+[data-theme="dark"] .quick-action-btn.green > i:first-child { background: rgba(22,163,74,.15);  color: #4ade80; }
+[data-theme="dark"] .quick-action-btn.blue  > i:first-child { background: rgba(37,99,235,.15);   color: #60a5fa; }
+[data-theme="dark"] .quick-action-btn.amber > i:first-child { background: rgba(217,119,6,.15);   color: #fbbf24; }
+[data-theme="dark"] .quick-action-btn:hover.green { border-color: rgba(22,163,74,.35);  background: rgba(22,163,74,.07); }
+[data-theme="dark"] .quick-action-btn:hover.blue  { border-color: rgba(37,99,235,.35);  background: rgba(37,99,235,.07); }
+[data-theme="dark"] .quick-action-btn:hover.amber { border-color: rgba(217,119,6,.35);  background: rgba(217,119,6,.07); }
+
+.qa-title { font-size: .82rem; font-weight: 600; color: var(--text-body); line-height: 1.2; }
+.qa-sub   { font-size: .72rem; color: var(--text-muted); }
+
+/* Status breakdown bars */
+.status-bar-row {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: .78rem; color: var(--text-body);
+}
+.status-bar-row .sb-label { width: 70px; color: var(--text-muted); }
+.status-bar-row .sb-track {
+  flex: 1; height: 6px; background: var(--border-light);
+  border-radius: 3px; overflow: hidden;
+}
+.status-bar-row .sb-fill { height: 100%; border-radius: 3px; transition: width .6s var(--ease); }
+.status-bar-row .sb-count { width: 28px; text-align: right; font-weight: 600; color: var(--text-heading); }
+
+/* ================================================================
    MISC
    ================================================================ */
 
