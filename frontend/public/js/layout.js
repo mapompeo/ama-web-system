@@ -21,7 +21,7 @@
     <!-- Navbar mobile -->
     <nav class="navbar d-lg-none fixed-top px-3" style="background:var(--sidebar-bg);height:56px;z-index:400">
       <a class="navbar-brand d-flex align-items-center gap-2 text-white text-decoration-none" href="/dashboard">
-        <div class="sidebar-brand-icon" style="width:28px;height:28px;font-size:.8rem;border-radius:7px"><i class="bi bi-heart-fill"></i></div>
+        <img src="/images/logo.png" alt="AMA ONG" class="navbar-brand-logo" />
         <span style="font-size:.9rem;font-weight:700">AMA ONG</span>
       </a>
       <div class="d-flex align-items-center gap-2">
@@ -38,7 +38,7 @@
     <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu" style="width:var(--sidebar-w)">
       <div class="offcanvas-header" style="border-bottom:1px solid rgba(255,255,255,.06)">
         <div class="sidebar-brand p-0 border-0">
-          <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+          <img src="/images/logo.png" alt="AMA ONG" class="sidebar-logo" />
           <div><div class="sidebar-brand-text">AMA ONG</div><div class="sidebar-brand-sub">Palmira Gobbi</div></div>
         </div>
         <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"></button>
@@ -64,7 +64,7 @@
     <!-- Sidebar desktop -->
     <nav id="sidebar" class="d-none d-lg-flex">
       <a href="/dashboard" class="sidebar-brand">
-        <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+        <img src="/images/logo.png" alt="AMA ONG" class="sidebar-logo" />
         <div><div class="sidebar-brand-text">AMA ONG</div><div class="sidebar-brand-sub">Palmira Gobbi</div></div>
         <button class="sidebar-pin" id="sidebarPin" type="button" title="Fixar menu">
           <i class="bi bi-chevron-right" id="sidebarPinIcon"></i>

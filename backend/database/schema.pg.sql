@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS activities (
 
 -- Admin (senha: admin123)
 INSERT INTO users (name, email, password, role) VALUES
-('Administrador', 'admin@amaong.org', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin')
+('Administrador', 'admin@amaong.org', '$2a$10$iSUU0BoCfwGA.1ENO2cmI.zShzuHKt1AWhHtY5lcmD6BE/1dwzskK', 'admin')
 ON CONFLICT (email) DO NOTHING;
 
 -- Voluntários de exemplo

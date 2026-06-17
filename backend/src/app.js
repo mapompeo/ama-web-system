@@ -33,6 +33,9 @@ app.use('/api/animal-records', require('./middlewares/auth'), require('./routes/
 // Servir fotos dos animais
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
+// Redireciona raiz para o login
+app.get('/', (req, res) => res.redirect('/login'));
+
 // Serve frontend
 const frontend = path.join(__dirname, '..', '..', 'frontend');
 app.use(express.static(path.join(frontend, 'public')));

@@ -268,6 +268,49 @@ body.sidebar-pinned #sidebar .sidebar-user-name {
 .sidebar-theme:hover { color: #facc15; }
 
 /* ================================================================
+   LOGOS (redondas sem modificar a imagem)
+   ================================================================ */
+
+.logo-round {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Login */
+.login-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: .85rem;
+  box-shadow: 0 8px 24px rgba(22,163,74,.4);
+}
+
+/* Sidebar */
+.sidebar-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(22,163,74,.4);
+}
+
+.sidebar-logo-mobile {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.navbar-brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ================================================================
    MAIN CONTENT
    ================================================================ */
 
