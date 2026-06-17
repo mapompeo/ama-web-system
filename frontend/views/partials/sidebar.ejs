@@ -1,81 +1,103 @@
-<!-- Navbar mobile (visível só em telas pequenas) -->
-<nav class="navbar navbar-dark d-lg-none fixed-top px-3" style="background-color:var(--primary)">
-  <a class="navbar-brand fw-bold" href="/dashboard">
-    <i class="bi bi-heart-fill me-2"></i>AMA ONG
+<!-- Navbar mobile -->
+<nav class="navbar d-lg-none fixed-top px-3" style="background:var(--sidebar-bg);height:56px;z-index:400">
+  <a class="navbar-brand d-flex align-items-center gap-2 text-white text-decoration-none" href="/dashboard">
+    <div class="sidebar-brand-icon" style="width:28px;height:28px;font-size:.8rem;border-radius:7px"><i class="bi bi-heart-fill"></i></div>
+    <span style="font-size:.9rem;font-weight:700">AMA ONG</span>
   </a>
-  <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu" aria-controls="mobileMenu">
-    <span class="navbar-toggler-icon"></span>
+  <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+    <i class="bi bi-list fs-4"></i>
   </button>
 </nav>
 
-<!-- Offcanvas menu mobile -->
-<div class="offcanvas offcanvas-start text-white" tabindex="-1" id="mobileMenu" style="background-color:var(--primary);width:240px">
-  <div class="offcanvas-header">
-    <span class="fw-bold fs-6"><i class="bi bi-heart-fill me-2"></i>AMA ONG</span>
-    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+<!-- Offcanvas mobile -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu" style="width:var(--sidebar-w)">
+  <div class="offcanvas-header" style="border-bottom:1px solid rgba(255,255,255,.06)">
+    <a href="/dashboard" class="sidebar-brand p-0 border-0">
+      <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+      <div>
+        <div class="sidebar-brand-text">AMA ONG</div>
+        <div class="sidebar-brand-sub">Palmira Gobbi</div>
+      </div>
+    </a>
+    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="offcanvas"></button>
   </div>
-  <div class="offcanvas-body d-flex flex-column p-3">
-    <ul class="nav nav-pills flex-column mb-auto">
-      <li class="nav-item">
-        <a href="/dashboard" class="nav-link text-white <%= locals.title === 'Dashboard' ? 'active' : '' %>">
-          <i class="bi bi-speedometer2 me-2"></i>Dashboard
-        </a>
-      </li>
-      <li>
-        <a href="/volunteers" class="nav-link text-white <%= locals.title && locals.title.includes('Voluntário') ? 'active' : '' %>">
-          <i class="bi bi-people me-2"></i>Voluntários
-        </a>
-      </li>
-      <li>
-        <a href="/beneficiaries" class="nav-link text-white <%= locals.title && locals.title.includes('Atendido') ? 'active' : '' %>">
-          <i class="bi bi-person-heart me-2"></i>Atendidos
-        </a>
-      </li>
-      <li>
-        <a href="/activities" class="nav-link text-white <%= locals.title && locals.title.includes('Atividade') ? 'active' : '' %>">
-          <i class="bi bi-calendar-event me-2"></i>Atividades
-        </a>
-      </li>
-    </ul>
-    <hr class="border-secondary" />
-    <div class="d-flex align-items-center justify-content-between">
-      <span class="text-white-50 small"><i class="bi bi-person-circle me-1"></i><%= user ? user.name : '' %></span>
-      <a href="/auth/logout" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i></a>
+  <div class="offcanvas-body d-flex flex-column p-0" style="background:var(--sidebar-bg)">
+    <div class="sidebar-section flex-grow-1">
+      <div class="sidebar-section-label">Menu</div>
+      <ul class="nav flex-column">
+        <li><a href="/dashboard"     class="nav-link <%= locals.title === 'Dashboard' ? 'active' : '' %>"><i class="bi bi-speedometer2"></i>Dashboard</a></li>
+        <li><a href="/volunteers"    class="nav-link <%= locals.title && locals.title.includes('Voluntári') ? 'active' : '' %>"><i class="bi bi-people"></i>Voluntários</a></li>
+        <li><a href="/beneficiaries" class="nav-link <%= locals.title && locals.title.includes('Atendido') ? 'active' : '' %>"><i class="bi bi-person-heart"></i>Atendidos</a></li>
+        <li><a href="/activities"    class="nav-link <%= locals.title && locals.title.includes('Atividade') ? 'active' : '' %>"><i class="bi bi-calendar-event"></i>Atividades</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-avatar"><i class="bi bi-person-fill"></i></div>
+      <span class="sidebar-user-name"><%= user ? user.name : '' %></span>
+      <a href="/auth/logout" class="sidebar-logout" title="Sair"><i class="bi bi-box-arrow-right"></i></a>
     </div>
   </div>
 </div>
 
 <!-- Sidebar desktop -->
-<nav id="sidebar" class="d-none d-lg-flex flex-column p-3 text-white">
-  <a href="/dashboard" class="d-flex align-items-center mb-4 text-white text-decoration-none">
-    <i class="bi bi-heart-fill me-2 fs-4"></i>
-    <span class="fs-5 fw-bold">AMA ONG</span>
+<nav id="sidebar" class="d-none d-lg-flex">
+  <a href="/dashboard" class="sidebar-brand">
+    <div class="sidebar-brand-icon"><i class="bi bi-heart-fill"></i></div>
+    <div>
+      <div class="sidebar-brand-text">AMA ONG</div>
+      <div class="sidebar-brand-sub">Palmira Gobbi</div>
+    </div>
+    <button class="sidebar-pin" id="sidebarPin" title="Fixar menu" type="button">
+      <i class="bi bi-chevron-right" id="sidebarPinIcon"></i>
+    </button>
   </a>
-  <ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item">
-      <a href="/dashboard" class="nav-link text-white <%= locals.title === 'Dashboard' ? 'active' : '' %>">
-        <i class="bi bi-speedometer2 me-2"></i>Dashboard
-      </a>
-    </li>
-    <li>
-      <a href="/volunteers" class="nav-link text-white <%= locals.title && locals.title.includes('Voluntário') ? 'active' : '' %>">
-        <i class="bi bi-people me-2"></i>Voluntários
-      </a>
-    </li>
-    <li>
-      <a href="/beneficiaries" class="nav-link text-white <%= locals.title && locals.title.includes('Atendido') ? 'active' : '' %>">
-        <i class="bi bi-person-heart me-2"></i>Atendidos
-      </a>
-    </li>
-    <li>
-      <a href="/activities" class="nav-link text-white <%= locals.title && locals.title.includes('Atividade') ? 'active' : '' %>">
-        <i class="bi bi-calendar-event me-2"></i>Atividades
-      </a>
-    </li>
-  </ul>
-  <hr class="border-secondary" />
-  <div class="d-flex align-items-center justify-content-between">
-    <span class="text-white-50 small"><i class="bi bi-person-circle me-1"></i><%= user ? user.name : '' %></span>
-    <a href="/auth/logout" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i></a>
+
+  <div class="sidebar-section">
+    <span class="sidebar-section-label">Menu</span>
+    <ul class="nav flex-column">
+      <li><a href="/dashboard"     class="nav-link <%= locals.title === 'Dashboard' ? 'active' : '' %>" title="Dashboard"><i class="bi bi-speedometer2"></i>Dashboard</a></li>
+      <li><a href="/volunteers"    class="nav-link <%= locals.title && locals.title.includes('Voluntári') ? 'active' : '' %>" title="Voluntários"><i class="bi bi-people"></i>Voluntários</a></li>
+      <li><a href="/beneficiaries" class="nav-link <%= locals.title && locals.title.includes('Atendido') ? 'active' : '' %>" title="Atendidos"><i class="bi bi-person-heart"></i>Atendidos</a></li>
+      <li><a href="/activities"    class="nav-link <%= locals.title && locals.title.includes('Atividade') ? 'active' : '' %>" title="Atividades"><i class="bi bi-calendar-event"></i>Atividades</a></li>
+    </ul>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-avatar"><i class="bi bi-person-fill"></i></div>
+    <span class="sidebar-user-name"><%= user ? user.name : '' %></span>
+    <a href="/auth/logout" class="sidebar-logout" title="Sair"><i class="bi bi-box-arrow-right"></i></a>
   </div>
 </nav>
+
+<script>
+  (function () {
+    const STORAGE_KEY = 'ama-sidebar-pinned';
+    const body        = document.body;
+    const pinBtn      = document.getElementById('sidebarPin');
+    const pinIcon     = document.getElementById('sidebarPinIcon');
+
+    // Restaura estado salvo
+    if (localStorage.getItem(STORAGE_KEY) === '1') {
+      body.classList.add('sidebar-pinned');
+    }
+
+    function updateIcon() {
+      const pinned = body.classList.contains('sidebar-pinned');
+      if (!pinIcon) return;
+      pinIcon.className = pinned ? 'bi bi-chevron-left' : 'bi bi-chevron-right';
+      if (pinBtn) pinBtn.title = pinned ? 'Desafixar menu' : 'Fixar menu';
+    }
+
+    updateIcon();
+
+    if (pinBtn) {
+      pinBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const pinned = body.classList.toggle('sidebar-pinned');
+        localStorage.setItem(STORAGE_KEY, pinned ? '1' : '0');
+        updateIcon();
+      });
+    }
+  })();
+</script>
