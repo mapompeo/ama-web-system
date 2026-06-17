@@ -1,31 +1,24 @@
-const Volunteer = require('../models/Volunteer');
+const Volunteer   = require('../models/Volunteer');
 const Beneficiary = require('../models/Beneficiary');
-const Activity = require('../models/Activity');
+const Activity    = require('../models/Activity');
 
-const DashboardController = {
-  async index(req, res) {
+module.exports = {
+  async stats(req, res) {
     try {
       const year = new Date().getFullYear();
-      const [volunteers, beneficiaries, upcoming, recentActivities, monthlyChart] = await Promise.all([
+      const [volunteers, beneficiaries, upcoming, recentActivities, monthlyChart, upcomingActivities, activityStatus] = await Promise.all([
         Volunteer.count(),
         Beneficiary.count(),
         Activity.countUpcoming(),
         Activity.findRecent(5),
-        Activity.countByMonth(year)
+        Activity.countByMonth(year),
+        Activity.findUpcoming(6),
+        Activity.countByStatus()
       ]);
-
-      res.render('pages/dashboard', {
-        title: 'Dashboard',
-        stats: { volunteers, beneficiaries, upcoming },
-        recentActivities,
-        monthlyChart,
-        chartYear: year
-      });
+      res.json({ stats: { volunteers, beneficiaries, upcoming }, recentActivities, monthlyChart, chartYear: year, upcomingActivities, activityStatus });
     } catch (err) {
       console.error(err);
-      res.status(500).render('pages/error', { title: 'Erro', code: 500, message: 'Erro ao carregar dashboard.' });
+      res.status(500).json({ error: 'Erro ao carregar dashboard.' });
     }
   }
 };
-
-module.exports = DashboardController;

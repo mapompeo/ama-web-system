@@ -44,6 +44,25 @@ const Activity = {
     return rows;
   },
 
+  async findUpcoming(limit = 5) {
+    const [rows] = await db.query(
+      `SELECT * FROM activities
+       WHERE status = 'agendada' AND activity_date >= CURDATE()
+       ORDER BY activity_date ASC LIMIT ?`,
+      [limit]
+    );
+    return rows;
+  },
+
+  async countByStatus() {
+    const [rows] = await db.query(
+      `SELECT status, COUNT(*) AS total FROM activities GROUP BY status`
+    );
+    const result = { agendada: 0, realizada: 0, cancelada: 0 };
+    rows.forEach(r => { result[r.status] = r.total; });
+    return result;
+  },
+
   async countByMonth(year) {
     const [rows] = await db.query(
       `SELECT MONTH(activity_date) AS month, COUNT(*) AS total
