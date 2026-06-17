@@ -3,17 +3,17 @@ const bcrypt = require('bcryptjs');
 
 const User = {
   async findByEmail(email) {
-    const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    const rows = await db.query('SELECT * FROM users WHERE email = $1', [email]);
     return rows[0] || null;
   },
 
   async create({ name, email, password, role = 'volunteer' }) {
     const hash = await bcrypt.hash(password, 10);
-    const [result] = await db.query(
-      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
+    const rows = await db.query(
+      'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id',
       [name, email, hash, role]
     );
-    return result.insertId;
+    return rows[0].id;
   },
 
   async comparePassword(plain, hash) {
