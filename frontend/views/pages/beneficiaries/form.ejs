@@ -1,70 +1,101 @@
 <%- include('../../partials/head') %>
-<body class="d-flex">
+<body>
   <%- include('../../partials/sidebar') %>
-  <main class="flex-grow-1 p-4 bg-light">
+  <main class="flex-grow-1">
     <nav aria-label="breadcrumb" class="mb-3">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/dashboard" class="text-decoration-none">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="/beneficiaries" class="text-decoration-none">Atendidos</a></li>
+        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/beneficiaries">Atendidos</a></li>
         <li class="breadcrumb-item active"><%= beneficiary ? 'Editar' : 'Novo' %></li>
       </ol>
     </nav>
 
-    <h5 class="fw-bold mb-4"><%= title %></h5>
+    <div class="page-header">
+      <h1 class="page-title"><%= title %></h1>
+    </div>
     <%- include('../../partials/alerts') %>
 
-    <div class="card border-0 shadow-sm" style="max-width:700px;">
-      <div class="card-body">
+    <div class="card" style="max-width:700px">
+      <div class="card-body p-4">
         <form action="<%= action %>" method="<%= method %>" class="needs-validation" novalidate>
           <div class="row g-3">
+
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Nome *</label>
+              <label class="form-label">Nome completo *</label>
               <div class="input-group has-validation">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
-                <input type="text" class="form-control" name="name" value="<%= beneficiary ? beneficiary.name : '' %>" required />
-                <div class="invalid-feedback">Nome é obrigatório.</div>
+                <input type="text" class="form-control" name="name"
+                  value="<%= beneficiary ? beneficiary.name : '' %>"
+                  placeholder="Ex: João da Silva"
+                  minlength="3" required />
+                <div class="invalid-feedback">Informe o nome completo (mínimo 3 caracteres).</div>
               </div>
             </div>
+
             <div class="col-md-6">
-              <label class="form-label fw-semibold">CPF</label>
-              <div class="input-group">
+              <label class="form-label">CPF</label>
+              <div class="input-group has-validation">
                 <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                <input type="text" class="form-control" name="cpf" value="<%= beneficiary ? beneficiary.cpf || '' : '' %>" placeholder="000.000.000-00" />
+                <input type="text" class="form-control" name="cpf"
+                  value="<%= beneficiary ? beneficiary.cpf || '' : '' %>"
+                  data-mask="cpf" />
+                <div class="invalid-feedback">CPF inválido.</div>
               </div>
             </div>
+
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Data de nascimento</label>
+              <label class="form-label">Data de nascimento</label>
               <input type="date" class="form-control" name="birth_date"
-                value="<%= beneficiary && beneficiary.birth_date ? new Date(beneficiary.birth_date).toISOString().split('T')[0] : '' %>" />
+                value="<%= beneficiary && beneficiary.birth_date ? new Date(beneficiary.birth_date).toISOString().split('T')[0] : '' %>"
+                max="<%= new Date().toISOString().split('T')[0] %>"
+                min="1900-01-01" />
+              <div class="invalid-feedback">Data de nascimento inválida.</div>
             </div>
+
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Telefone</label>
-              <div class="input-group">
+              <label class="form-label">Telefone</label>
+              <div class="input-group has-validation">
                 <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                <input type="text" class="form-control" name="phone" value="<%= beneficiary ? beneficiary.phone || '' : '' %>" placeholder="(47) 99999-9999" />
+                <input type="text" class="form-control" name="phone"
+                  value="<%= beneficiary ? beneficiary.phone || '' : '' %>"
+                  data-mask="phone" />
+                <div class="invalid-feedback">Informe um telefone válido com DDD.</div>
               </div>
             </div>
+
             <div class="col-12">
-              <label class="form-label fw-semibold">Endereço</label>
+              <label class="form-label">Endereço</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                <input type="text" class="form-control" name="address" value="<%= beneficiary ? beneficiary.address || '' : '' %>" />
+                <input type="text" class="form-control" name="address" id="addressField"
+                  value="<%= beneficiary ? beneficiary.address || '' : '' %>"
+                  placeholder="Rua, número, bairro, cidade" />
+                <a id="mapsBtn" href="#" target="_blank" rel="noopener"
+                   class="btn btn-outline-secondary" title="Abrir no Google Maps"
+                   style="<%= beneficiary && beneficiary.address ? '' : 'display:none' %>">
+                  <i class="bi bi-map"></i>
+                </a>
               </div>
             </div>
+
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Nome do responsável</label>
+              <label class="form-label">Nome do responsável</label>
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person-check"></i></span>
-                <input type="text" class="form-control" name="responsible_name" value="<%= beneficiary ? beneficiary.responsible_name || '' : '' %>" />
+                <input type="text" class="form-control" name="responsible_name"
+                  value="<%= beneficiary ? beneficiary.responsible_name || '' : '' %>"
+                  placeholder="Nome do responsável legal" />
               </div>
             </div>
+
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Status</label>
+              <label class="form-label">Status</label>
               <select class="form-select" name="status">
-                <option value="ativo" <%= beneficiary && beneficiary.status === 'ativo' ? 'selected' : '' %>>Ativo</option>
+                <option value="ativo"   <%= beneficiary && beneficiary.status === 'ativo'   ? 'selected' : '' %>>Ativo</option>
                 <option value="inativo" <%= beneficiary && beneficiary.status === 'inativo' ? 'selected' : '' %>>Inativo</option>
               </select>
             </div>
+
           </div>
           <div class="mt-4 d-flex gap-2">
             <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Salvar</button>
@@ -76,5 +107,18 @@
   </main>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/main.js"></script>
+  <script>
+    const addr = document.getElementById('addressField');
+    const mBtn = document.getElementById('mapsBtn');
+    if (addr && mBtn) {
+      function updateMaps() {
+        const v = addr.value.trim();
+        mBtn.style.display = v ? '' : 'none';
+        mBtn.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v);
+      }
+      addr.addEventListener('input', updateMaps);
+      updateMaps();
+    }
+  </script>
 </body>
 </html>
