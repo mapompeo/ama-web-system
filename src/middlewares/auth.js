@@ -1,19 +1,9 @@
-const jwt = require('jsonwebtoken');
-
 function authMiddleware(req, res, next) {
-  const token = req.session?.token || req.headers['authorization']?.split(' ')[1];
-
-  if (!token) {
-    return res.redirect('/auth/login');
+  if (req.session && req.session.user) {
+    return next();
   }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch {
-    return res.redirect('/auth/login');
-  }
+  req.flash('error', 'Faça login para acessar essa página.');
+  res.redirect('/auth/login');
 }
 
 module.exports = authMiddleware;

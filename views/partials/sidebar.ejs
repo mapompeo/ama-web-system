@@ -1,0 +1,33 @@
+<nav id="sidebar" class="d-flex flex-column p-3 text-white">
+  <a href="/dashboard" class="d-flex align-items-center mb-4 text-white text-decoration-none">
+    <i class="bi bi-heart-fill me-2 fs-4"></i>
+    <span class="fs-5 fw-bold">AMA ONG</span>
+  </a>
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a href="/dashboard" class="nav-link text-white <%= locals.title === 'Dashboard' ? 'active' : '' %>">
+        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+      </a>
+    </li>
+    <li>
+      <a href="/volunteers" class="nav-link text-white <%= locals.title && locals.title.includes('Voluntário') ? 'active' : '' %>">
+        <i class="bi bi-people me-2"></i> Voluntários
+      </a>
+    </li>
+    <li>
+      <a href="/beneficiaries" class="nav-link text-white <%= locals.title && locals.title.includes('Atendido') ? 'active' : '' %>">
+        <i class="bi bi-person-heart me-2"></i> Atendidos
+      </a>
+    </li>
+    <li>
+      <a href="/activities" class="nav-link text-white <%= locals.title && locals.title.includes('Atividade') ? 'active' : '' %>">
+        <i class="bi bi-calendar-event me-2"></i> Atividades
+      </a>
+    </li>
+  </ul>
+  <hr class="border-secondary" />
+  <div class="d-flex align-items-center justify-content-between">
+    <span class="text-white-50 small"><i class="bi bi-person-circle me-1"></i><%= user ? user.name : '' %></span>
+    <a href="/auth/logout" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-right"></i></a>
+  </div>
+</nav>
