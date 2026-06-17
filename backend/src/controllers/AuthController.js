@@ -1,34 +1,41 @@
+const jwt  = require('jsonwebtoken');
 const User = require('../models/User');
 
-const AuthController = {
-  showLogin(req, res) {
-    if (req.session.user) return res.redirect('/dashboard');
-    res.render('pages/login', { title: 'Login' });
-  },
+const SECRET      = process.env.JWT_SECRET || 'ama-jwt-secret-dev';
+const COOKIE_OPTS = { httpOnly: true, sameSite: 'strict', maxAge: 8 * 60 * 60 * 1000 };
 
+module.exports = {
   async login(req, res) {
     const { email, password } = req.body;
-
     try {
       const user = await User.findByEmail(email);
       if (!user || !(await User.comparePassword(password, user.password))) {
-        req.flash('error', 'E-mail ou senha inválidos.');
-        return res.redirect('/auth/login');
+        return res.status(401).json({ error: 'E-mail ou senha inválidos.' });
       }
-
-      req.session.user = { id: user.id, name: user.name, role: user.role };
-      res.redirect('/dashboard');
+      const payload = { id: user.id, name: user.name, role: user.role };
+      const token   = jwt.sign(payload, SECRET, { expiresIn: '8h' });
+      res.cookie('token', token, COOKIE_OPTS);
+      res.json({ user: payload });
     } catch (err) {
       console.error(err);
-      req.flash('error', 'Erro interno. Tente novamente.');
-      res.redirect('/auth/login');
+      res.status(500).json({ error: 'Erro interno. Tente novamente.' });
     }
   },
 
   logout(req, res) {
-    req.session.destroy();
-    res.redirect('/auth/login');
+    res.clearCookie('token');
+    res.json({ ok: true });
+  },
+
+  me(req, res) {
+    const token = req.cookies?.token;
+    if (!token) return res.status(401).json({ error: 'Não autenticado' });
+    try {
+      const { id, name, role } = jwt.verify(token, SECRET);
+      res.json({ user: { id, name, role } });
+    } catch {
+      res.clearCookie('token');
+      res.status(401).json({ error: 'Sessão expirada. Faça login novamente.' });
+    }
   }
 };
-
-module.exports = AuthController;
