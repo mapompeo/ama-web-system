@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    const { stats, recentActivities, monthlyChart, chartYear, upcomingActivities, activityStatus } =
+    const { stats, recentActivities, monthlyChart, chartYear, upcomingActivities, activityStatus, animalsBySpecies, animalsByAdoptionStatus } =
       await api.get('/dashboard/stats');
 
     // ── Stat cards ────────────────────────────────────────────────
@@ -107,6 +107,54 @@ document.addEventListener('DOMContentLoaded', async () => {
         <span class="sb-count">${count}</span>
       </div>`;
     }).join('');
+
+    // ── Gráfico de espécies (pizza) ───────────────────────────────
+    const speciesEl = document.getElementById('speciesChart');
+    if (speciesEl && animalsBySpecies?.length) {
+      new Chart(speciesEl, {
+        type: 'doughnut',
+        data: {
+          labels: animalsBySpecies.map(r => r.species),
+          datasets: [{
+            data: animalsBySpecies.map(r => r.total),
+            backgroundColor: ['rgba(22,163,74,.8)', 'rgba(99,102,241,.8)', 'rgba(245,158,11,.8)'],
+            borderWidth: 2,
+            borderColor: isDark ? '#1e2530' : '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom', labels: { color: tickColor, font: { size: 11 } } } }
+        }
+      });
+    }
+
+    // ── Gráfico de status de adoção (barras) ──────────────────────
+    const adoptionEl = document.getElementById('adoptionChart');
+    if (adoptionEl && animalsByAdoptionStatus?.length) {
+      const STATUS_LABELS = { disponivel: 'Disponível', adotado: 'Adotado', em_tratamento: 'Em tratamento', obito: 'Óbito' };
+      const STATUS_COLORS = { disponivel: 'rgba(22,163,74,.8)', adotado: 'rgba(59,130,246,.8)', em_tratamento: 'rgba(245,158,11,.8)', obito: 'rgba(148,163,184,.8)' };
+      new Chart(adoptionEl, {
+        type: 'bar',
+        data: {
+          labels: animalsByAdoptionStatus.map(r => STATUS_LABELS[r.status] || r.status),
+          datasets: [{
+            label: 'Animais',
+            data: animalsByAdoptionStatus.map(r => r.total),
+            backgroundColor: animalsByAdoptionStatus.map(r => STATUS_COLORS[r.status] || 'rgba(148,163,184,.8)'),
+            borderRadius: 6, borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1, color: tickColor, font: { size: 11 } }, grid: { color: gridColor }, border: { display: false } },
+            x: { ticks: { color: tickColor, font: { size: 11 } }, grid: { display: false }, border: { display: false } }
+          }
+        }
+      });
+    }
 
     // ── Revelar conteúdo ──────────────────────────────────────────
     document.getElementById('loading').style.display = 'none';

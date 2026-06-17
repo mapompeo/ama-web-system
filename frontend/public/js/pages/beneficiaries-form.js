@@ -22,6 +22,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (b.birth_date) {
         document.getElementById('f-birth-date').value = new Date(b.birth_date).toISOString().split('T')[0];
       }
+      // Mostrar foto atual
+      if (b.photo_url) {
+        const preview = document.getElementById('photo-preview');
+        if (preview) { preview.src = b.photo_url; preview.style.display = ''; }
+      }
     } catch (err) { showAlert('danger', 'Erro ao carregar: ' + err.message); }
   }
 
@@ -52,8 +57,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     try {
+      let animalId = id;
       if (id) { await api.put(`/beneficiaries/${id}`, data); }
-      else    { await api.post('/beneficiaries', data); }
+      else    { const saved = await api.post('/beneficiaries', data); animalId = saved.id; }
+
+      // Upload foto se selecionada
+      const photoInput = document.getElementById('f-photo');
+      if (photoInput?.files?.length) {
+        const fd = new FormData();
+        fd.append('photo', photoInput.files[0]);
+        const r = await fetch(`/api/beneficiaries/${animalId}/photo`, {
+          method: 'POST', body: fd, credentials: 'include'
+        });
+        if (!r.ok) {
+          const body = await r.json().catch(() => ({}));
+          throw new Error(body.error || `Falha no upload (HTTP ${r.status})`);
+        }
+      }
+
+      const msg = id ? 'Animal atualizado com sucesso!' : 'Animal cadastrado com sucesso!';
+      sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg }));
       window.location.href = '/beneficiaries';
     } catch (err) {
       showAlert('danger', 'Erro ao salvar: ' + err.message);

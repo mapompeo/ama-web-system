@@ -47,7 +47,21 @@ CREATE TABLE IF NOT EXISTS beneficiaries (
   responsible_name VARCHAR(100),
   responsible_phone VARCHAR(20),
   notes TEXT,
+  photo_url VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ------------------------------------------------------------
+-- Histórico / registros por animal
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS animal_records (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  animal_id INT NOT NULL,
+  title VARCHAR(150) NOT NULL,
+  description TEXT,
+  record_date DATE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (animal_id) REFERENCES beneficiaries(id) ON DELETE CASCADE
 );
 
 -- ------------------------------------------------------------

@@ -24,12 +24,17 @@
       </div>
       <div id="alert-container"></div>
       <div class="card table-card">
-        <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="card-header d-flex align-items-center gap-2 flex-wrap">
           <div class="input-group input-group-sm" style="max-width:280px">
             <span class="input-group-text"><i class="bi bi-search"></i></span>
             <input type="text" id="tableSearch" class="form-control" placeholder="Buscar voluntário..." />
           </div>
-          <span class="text-muted" id="record-count" style="font-size:.78rem"></span>
+          <div class="ms-auto d-flex align-items-center gap-2">
+            <span class="text-muted" id="record-count" style="font-size:.78rem"></span>
+            <button id="exportBtn" class="btn btn-sm btn-outline-secondary">
+              <i class="bi bi-download me-1"></i>Exportar
+            </button>
+          </div>
         </div>
         <div class="card-body">
           <div class="table-responsive">

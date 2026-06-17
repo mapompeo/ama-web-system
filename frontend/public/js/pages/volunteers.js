@@ -47,15 +47,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('del-confirm').addEventListener('click', async function () {
       try {
         await api.delete(`/volunteers/${this.dataset.id}`);
+        sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg: 'Voluntário removido com sucesso.' }));
         window.location.reload();
-      } catch (err) {
-        alert('Erro ao remover: ' + err.message);
-      }
+      } catch (err) { showAlert('danger', 'Erro ao remover: ' + err.message); }
+    });
+
+    // Exportar CSV
+    document.getElementById('exportBtn')?.addEventListener('click', () => {
+      exportCSV(
+        ['ID', 'Nome', 'E-mail', 'Telefone', 'CPF', 'Endereço', 'Data de entrada', 'Status'],
+        volunteers.map(v => [
+          v.id, v.name, v.email || '', v.phone || '', v.cpf || '', v.address || '',
+          v.join_date ? new Date(v.join_date).toLocaleDateString('pt-BR') : '', v.status
+        ]),
+        'voluntarios.csv'
+      );
     });
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = '';
     initTableUtils();
+    checkPendingToast();
   } catch (err) {
     document.getElementById('loading').innerHTML = `<p class="text-danger p-4">Erro: ${err.message}</p>`;
   }

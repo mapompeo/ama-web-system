@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>!function(){var t=localStorage.getItem('ama-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)}()</script>
+  <title>Histórico — AMA ONG</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <main>
+    <div id="loading" style="display:flex;justify-content:center;align-items:center;height:60vh">
+      <div class="spinner-border text-success" role="status"></div>
+    </div>
+    <div id="content" style="display:none">
+      <nav aria-label="breadcrumb" class="mb-1"><ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/beneficiaries">Animais</a></li>
+        <li class="breadcrumb-item active" id="crumb-name">Histórico</li>
+      </ol></nav>
+      <div class="page-header">
+        <h1 class="page-title" id="page-title">Histórico</h1>
+        <a href="/beneficiaries" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Voltar</a>
+      </div>
+      <div id="alert-container"></div>
+
+      <!-- Card do animal -->
+      <div class="card mb-3" style="max-width:680px" id="animal-card">
+        <div class="card-body d-flex align-items-center gap-3 p-3">
+          <img id="animal-photo" src="" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--border);display:none">
+          <div id="animal-photo-placeholder" style="width:64px;height:64px;border-radius:10px;background:var(--border-light);display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:var(--text-muted)">
+            <i class="bi bi-hearts"></i>
+          </div>
+          <div>
+            <div class="fw-bold" id="animal-name" style="font-size:1rem;color:var(--text-heading)"></div>
+            <div style="font-size:.82rem;color:var(--text-muted)" id="animal-details"></div>
+          </div>
+          <a id="edit-link" href="#" class="btn btn-sm btn-outline-secondary ms-auto"><i class="bi bi-pencil me-1"></i>Editar</a>
+        </div>
+      </div>
+
+      <!-- Timeline de registros -->
+      <div class="row g-3" style="max-width:680px">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <span><i class="bi bi-clock-history me-2 text-primary"></i>Registros</span>
+              <button class="btn btn-sm btn-primary" data-bs-toggle="collapse" data-bs-target="#addRecordForm">
+                <i class="bi bi-plus-lg me-1"></i>Adicionar
+              </button>
+            </div>
+
+            <!-- Formulário de novo registro -->
+            <div class="collapse" id="addRecordForm">
+              <div class="card-body border-bottom" style="background:var(--card-bg)">
+                <form id="record-form" novalidate>
+                  <div class="row g-2">
+                    <div class="col-md-8">
+                      <label class="form-label">Título *</label>
+                      <input type="text" class="form-control form-control-sm" id="r-title" placeholder="Ex: Vacinação V8, Consulta veterinária, Banho..." required />
+                      <div class="invalid-feedback">Informe o título.</div>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label">Data *</label>
+                      <input type="date" class="form-control form-control-sm" id="r-date" required />
+                      <div class="invalid-feedback">Informe a data.</div>
+                    </div>
+                    <div class="col-12">
+                      <label class="form-label">Descrição</label>
+                      <textarea class="form-control form-control-sm" id="r-description" rows="2" placeholder="Detalhes, observações..."></textarea>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                      <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-check-lg me-1"></i>Salvar registro</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#addRecordForm">Cancelar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Lista de registros -->
+            <div class="card-body p-0" id="records-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>document.getElementById('r-date').max = new Date().toISOString().split('T')[0];</script>
+  <script src="/js/api.js"></script>
+  <script src="/js/layout.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/pages/animal-history.js"></script>
+</body>
+</html>

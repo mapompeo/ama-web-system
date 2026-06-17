@@ -24,12 +24,88 @@
       </div>
       <div id="alert-container"></div>
       <div class="card table-card">
-        <div class="card-header d-flex align-items-center justify-content-between">
-          <div class="input-group input-group-sm" style="max-width:280px">
-            <span class="input-group-text"><i class="bi bi-search"></i></span>
-            <input type="text" id="tableSearch" class="form-control" placeholder="Buscar animal..." />
+        <div class="card-header">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <div class="input-group input-group-sm" style="max-width:220px">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input type="text" id="tableSearch" class="form-control" placeholder="Buscar animal..." />
+            </div>
+
+            <!-- Filtro Espécie -->
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="btnSpecies"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Espécie</button>
+              <ul class="dropdown-menu shadow-sm" style="min-width:160px">
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-species" value="Cachorro">
+                  <i class="bi bi-hearts" style="color:var(--primary)"></i> Cachorro
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-species" value="Gato">
+                  <i class="bi bi-stars" style="color:var(--primary)"></i> Gato
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-species" value="Outro">
+                  <i class="bi bi-question-circle text-secondary"></i> Outro
+                </label></li>
+              </ul>
+            </div>
+
+            <!-- Filtro Status -->
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="btnStatus"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Status</button>
+              <ul class="dropdown-menu shadow-sm" style="min-width:190px">
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-status" value="disponivel">
+                  <span class="badge bg-success">Disponível</span>
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-status" value="adotado">
+                  <span class="badge bg-primary">Adotado</span>
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-status" value="em_tratamento">
+                  <span class="badge bg-warning text-dark">Em tratamento</span>
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-status" value="obito">
+                  <span class="badge bg-secondary">Óbito</span>
+                </label></li>
+              </ul>
+            </div>
+
+            <!-- Filtro Porte -->
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="btnSize"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Porte</button>
+              <ul class="dropdown-menu shadow-sm" style="min-width:150px">
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-size" value="Pequeno"> Pequeno
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-size" value="Médio"> Médio
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-size" value="Grande"> Grande
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-size" value="Gigante"> Gigante
+                </label></li>
+              </ul>
+            </div>
+
+            <button id="clearFilters" class="btn btn-sm btn-link text-danger p-0" style="display:none;font-size:.8rem">
+              <i class="bi bi-x-circle me-1"></i>Limpar filtros
+            </button>
+
+            <div class="ms-auto d-flex align-items-center gap-2">
+              <span class="text-muted" id="record-count" style="font-size:.78rem"></span>
+              <button id="exportBtn" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-download me-1"></i>Exportar
+              </button>
+            </div>
           </div>
-          <span class="text-muted" id="record-count" style="font-size:.78rem"></span>
         </div>
         <div class="card-body">
           <div class="table-responsive">

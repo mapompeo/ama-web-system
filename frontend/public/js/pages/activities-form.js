@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       if (id) { await api.put(`/activities/${id}`, data); }
       else    { await api.post('/activities', data); }
+      const msg = id ? 'Atividade atualizada com sucesso!' : 'Atividade cadastrada com sucesso!';
+      sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg }));
       window.location.href = '/activities';
     } catch (err) {
       showAlert('danger', 'Erro ao salvar: ' + err.message);

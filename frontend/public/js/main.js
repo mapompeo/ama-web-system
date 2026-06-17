@@ -74,6 +74,52 @@ function showAlert(type, message) {
   setTimeout(() => document.getElementById(id)?.remove(), 5000);
 }
 
+function showToast(type, message) {
+  let container = document.getElementById('toastContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toastContainer';
+    container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+    container.style.zIndex = '9999';
+    document.body.appendChild(container);
+  }
+  const icons = { success: 'check-circle-fill', danger: 'x-circle-fill', warning: 'exclamation-triangle-fill', info: 'info-circle-fill' };
+  const id   = 'toast-' + Date.now();
+  const icon = icons[type] || 'info-circle-fill';
+  container.insertAdjacentHTML('beforeend', `
+    <div id="${id}" class="toast align-items-center text-bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2">
+          <i class="bi bi-${icon}"></i>${message}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>`);
+  const el = document.getElementById(id);
+  bootstrap.Toast.getOrCreateInstance(el).show();
+  el.addEventListener('hidden.bs.toast', () => el.remove());
+}
+
+function checkPendingToast() {
+  const raw = sessionStorage.getItem('pendingToast');
+  if (!raw) return;
+  sessionStorage.removeItem('pendingToast');
+  try {
+    const { type, msg } = JSON.parse(raw);
+    setTimeout(() => showToast(type, msg), 300);
+  } catch {}
+}
+
+function exportCSV(headers, rows, filename) {
+  const esc   = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const lines = [headers.map(esc).join(','), ...rows.map(r => r.map(esc).join(','))];
+  const blob  = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+  const url   = URL.createObjectURL(blob);
+  const a     = Object.assign(document.createElement('a'), { href: url, download: filename });
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function initTableUtils() {
   const searchInput = document.getElementById('tableSearch');
   const tableBody   = document.getElementById('tableBody');

@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       if (id) { await api.put(`/volunteers/${id}`, data); }
       else    { await api.post('/volunteers', data); }
+      const msg = id ? 'Voluntário atualizado com sucesso!' : 'Voluntário cadastrado com sucesso!';
+      sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg }));
       window.location.href = '/volunteers';
     } catch (err) {
       showAlert('danger', 'Erro ao salvar: ' + err.message);

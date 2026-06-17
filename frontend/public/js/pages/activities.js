@@ -44,13 +44,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('del-confirm').addEventListener('click', async function () {
       try {
         await api.delete(`/activities/${this.dataset.id}`);
+        sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg: 'Atividade removida com sucesso.' }));
         window.location.reload();
-      } catch (err) { alert('Erro ao remover: ' + err.message); }
+      } catch (err) { showAlert('danger', 'Erro ao remover: ' + err.message); }
+    });
+
+    // Exportar CSV
+    document.getElementById('exportBtn')?.addEventListener('click', () => {
+      exportCSV(
+        ['ID', 'Título', 'Data', 'Local', 'Status', 'Descrição'],
+        items.map(a => [
+          a.id, a.title,
+          new Date(a.activity_date).toLocaleDateString('pt-BR'),
+          a.location || '', a.status, a.description || ''
+        ]),
+        'atividades.csv'
+      );
     });
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = '';
     initTableUtils();
+    checkPendingToast();
   } catch (err) {
     document.getElementById('loading').innerHTML = `<p class="text-danger p-4">Erro: ${err.message}</p>`;
   }

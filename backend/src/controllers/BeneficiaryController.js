@@ -3,7 +3,9 @@ const Beneficiary = require('../models/Beneficiary');
 module.exports = {
   async index(req, res) {
     try {
-      res.json(await Beneficiary.findAll());
+      const { page = 1, limit = 20, species, status, size, search } = req.query;
+      const result = await Beneficiary.findAll({ page, limit, species, status, size, search });
+      res.json(result);
     } catch (err) {
       res.status(500).json({ error: 'Erro ao buscar animais.' });
     }
@@ -21,6 +23,9 @@ module.exports = {
 
   async create(req, res) {
     try {
+      const { name, status } = req.body;
+      if (!name?.trim()) return res.status(400).json({ error: 'Nome é obrigatório.' });
+      if (!status)       return res.status(400).json({ error: 'Status é obrigatório.' });
       const id = await Beneficiary.create(req.body);
       res.status(201).json(await Beneficiary.findById(id));
     } catch (err) {
@@ -30,10 +35,24 @@ module.exports = {
 
   async update(req, res) {
     try {
+      const { name, status } = req.body;
+      if (!name?.trim()) return res.status(400).json({ error: 'Nome é obrigatório.' });
+      if (!status)       return res.status(400).json({ error: 'Status é obrigatório.' });
       await Beneficiary.update(req.params.id, req.body);
       res.json(await Beneficiary.findById(req.params.id));
     } catch (err) {
       res.status(500).json({ error: 'Erro ao atualizar animal.' });
+    }
+  },
+
+  async uploadPhoto(req, res) {
+    try {
+      if (!req.file) return res.status(400).json({ error: 'Nenhuma imagem enviada.' });
+      const photoUrl = `/uploads/animals/${req.file.filename}`;
+      await Beneficiary.updatePhoto(req.params.id, photoUrl);
+      res.json({ photo_url: photoUrl });
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao salvar foto.' });
     }
   },
 
