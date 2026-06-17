@@ -1,55 +1,48 @@
 const Beneficiary = require('../models/Beneficiary');
 
-const BeneficiaryController = {
+module.exports = {
   async index(req, res) {
-    const beneficiaries = await Beneficiary.findAll();
-    res.render('pages/beneficiaries/index', { title: 'Atendidos', beneficiaries });
+    try {
+      res.json(await Beneficiary.findAll());
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao buscar animais.' });
+    }
   },
 
-  newForm(req, res) {
-    res.render('pages/beneficiaries/form', { title: 'Novo Atendido', beneficiary: null, action: '/beneficiaries', method: 'POST' });
+  async show(req, res) {
+    try {
+      const b = await Beneficiary.findById(req.params.id);
+      if (!b) return res.status(404).json({ error: 'Animal não encontrado.' });
+      res.json(b);
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao buscar animal.' });
+    }
   },
 
   async create(req, res) {
     try {
-      await Beneficiary.create(req.body);
-      req.flash('success', 'Atendido cadastrado com sucesso!');
-      res.redirect('/beneficiaries');
+      const id = await Beneficiary.create(req.body);
+      res.status(201).json(await Beneficiary.findById(id));
     } catch (err) {
-      console.error(err);
-      req.flash('error', 'Erro ao cadastrar atendido.');
-      res.redirect('/beneficiaries/new');
+      res.status(500).json({ error: 'Erro ao cadastrar animal.' });
     }
-  },
-
-  async editForm(req, res) {
-    const beneficiary = await Beneficiary.findById(req.params.id);
-    if (!beneficiary) return res.redirect('/beneficiaries');
-    res.render('pages/beneficiaries/form', {
-      title: 'Editar Atendido',
-      beneficiary,
-      action: `/beneficiaries/${beneficiary.id}?_method=PUT`,
-      method: 'POST'
-    });
   },
 
   async update(req, res) {
     try {
       await Beneficiary.update(req.params.id, req.body);
-      req.flash('success', 'Atendido atualizado com sucesso!');
-      res.redirect('/beneficiaries');
+      res.json(await Beneficiary.findById(req.params.id));
     } catch (err) {
-      console.error(err);
-      req.flash('error', 'Erro ao atualizar atendido.');
-      res.redirect(`/beneficiaries/${req.params.id}/edit`);
+      res.status(500).json({ error: 'Erro ao atualizar animal.' });
     }
   },
 
-  async delete(req, res) {
-    await Beneficiary.delete(req.params.id);
-    req.flash('success', 'Atendido removido.');
-    res.redirect('/beneficiaries');
+  async destroy(req, res) {
+    try {
+      await Beneficiary.delete(req.params.id);
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao remover animal.' });
+    }
   }
 };
-
-module.exports = BeneficiaryController;

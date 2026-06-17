@@ -33,17 +33,20 @@ CREATE TABLE IF NOT EXISTS volunteers (
 );
 
 -- ------------------------------------------------------------
--- Atendidos (beneficiários)
+-- Animais (atendidos pela ONG)
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS beneficiaries (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
-  cpf VARCHAR(14),
+  species ENUM('Cachorro','Gato','Outro') NOT NULL DEFAULT 'Cachorro',
+  breed VARCHAR(100),
+  sex ENUM('Macho','Fêmea','Não identificado') NOT NULL DEFAULT 'Não identificado',
+  size ENUM('Pequeno','Médio','Grande','Gigante'),
   birth_date DATE,
-  phone VARCHAR(20),
-  address VARCHAR(255),
+  status ENUM('disponivel','adotado','em_tratamento','obito') NOT NULL DEFAULT 'disponivel',
   responsible_name VARCHAR(100),
-  status ENUM('ativo', 'inativo') NOT NULL DEFAULT 'ativo',
+  responsible_phone VARCHAR(20),
+  notes TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -73,10 +76,10 @@ INSERT INTO volunteers (name, email, phone, join_date, status) VALUES
 ('João Santos', 'joao@email.com', '(47) 99000-0002', '2024-02-15', 'ativo'),
 ('Ana Oliveira', 'ana@email.com', '(47) 99000-0003', '2024-03-20', 'ativo');
 
--- Atendidos de exemplo
-INSERT INTO beneficiaries (name, phone, address, responsible_name, status) VALUES
-('Carlos Pereira', '(47) 98000-0001', 'Rua das Flores, 10', 'Rosa Pereira', 'ativo'),
-('Lucia Mendes', '(47) 98000-0002', 'Av. Central, 55', 'Pedro Mendes', 'ativo');
+-- Animais de exemplo
+INSERT INTO beneficiaries (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES
+('Rex', 'Cachorro', 'Vira-lata', 'Macho', 'Médio', '2022-03-10', 'disponivel', 'Carlos Souza', '(47) 99000-0010', 'Vacinado e castrado'),
+('Mel', 'Cachorro', 'Golden Retriever', 'Fêmea', 'Grande', '2021-07-15', 'adotado', 'Ana Lima', '(47) 99000-0011', 'Adotada em março de 2024');
 
 -- Atividades de exemplo
 INSERT INTO activities (title, description, activity_date, location, status) VALUES

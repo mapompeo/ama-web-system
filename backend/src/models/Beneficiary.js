@@ -11,18 +11,25 @@ const Beneficiary = {
     return rows[0] || null;
   },
 
-  async create({ name, cpf, birth_date, phone, address, responsible_name, status }) {
+  async create({ name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes }) {
     const [result] = await db.query(
-      'INSERT INTO beneficiaries (name, cpf, birth_date, phone, address, responsible_name, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [name, cpf, birth_date || null, phone, address, responsible_name, status || 'ativo']
+      `INSERT INTO beneficiaries
+         (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, species || 'Cachorro', breed || null, sex || 'Não identificado', size || null,
+       birth_date || null, status || 'disponivel', responsible_name || null, responsible_phone || null, notes || null]
     );
     return result.insertId;
   },
 
-  async update(id, { name, cpf, birth_date, phone, address, responsible_name, status }) {
+  async update(id, { name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes }) {
     await db.query(
-      'UPDATE beneficiaries SET name=?, cpf=?, birth_date=?, phone=?, address=?, responsible_name=?, status=? WHERE id=?',
-      [name, cpf, birth_date || null, phone, address, responsible_name, status, id]
+      `UPDATE beneficiaries SET
+         name=?, species=?, breed=?, sex=?, size=?, birth_date=?,
+         status=?, responsible_name=?, responsible_phone=?, notes=?
+       WHERE id=?`,
+      [name, species || 'Cachorro', breed || null, sex || 'Não identificado', size || null,
+       birth_date || null, status, responsible_name || null, responsible_phone || null, notes || null, id]
     );
   },
 
@@ -31,7 +38,9 @@ const Beneficiary = {
   },
 
   async count() {
-    const [[{ total }]] = await db.query('SELECT COUNT(*) AS total FROM beneficiaries WHERE status = "ativo"');
+    const [[{ total }]] = await db.query(
+      'SELECT COUNT(*) AS total FROM beneficiaries WHERE status != "obito"'
+    );
     return total;
   }
 };
