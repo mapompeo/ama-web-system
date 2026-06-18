@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const match = window.location.pathname.match(/\/atividades\/(\d+)/);
-  const params = new URLSearchParams(window.location.search);
-  const id     = match ? match[1] : params.get('id');
+  const id     = match ? match[1] : null;
   const form     = document.getElementById('main-form');
   const title    = document.getElementById('page-title');
   const crumb    = document.getElementById('crumb-action');

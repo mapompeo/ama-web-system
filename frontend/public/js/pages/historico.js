@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const match    = window.location.pathname.match(/\/historico\/(\d+)/);
-  const params   = new URLSearchParams(window.location.search);
-  const animalId = match ? match[1] : params.get('id');
+  const animalId = match ? match[1] : null;
 
   if (!animalId) { window.location.href = '/animais'; return; }
 
