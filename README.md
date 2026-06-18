@@ -18,6 +18,7 @@ Sistema web desenvolvido para a **Associação Palmira Gobbi Amigo dos Amigos (A
 | Backend | Node.js 18+ / Express 4 |
 | Banco de Dados | PostgreSQL (Supabase) |
 | Autenticação | JWT + bcrypt |
+| Upload de PDF | express-fileupload |
 | Deploy | Render |
 
 ---
@@ -28,24 +29,33 @@ Sistema web desenvolvido para a **Associação Palmira Gobbi Amigo dos Amigos (A
 ama-web-system/
 ├── backend/
 │   ├── database/
-│   │   ├── schema.pg.sql       # Criação das tabelas (PostgreSQL)
-│   │   └── seed.pg.sql         # Dados realistas (50+ registros por tabela)
+│   │   ├── schema.pg.sql         # Criação das tabelas (PostgreSQL)
+│   │   └── seed.pg.sql           # Dados realistas (50+ registros)
 │   ├── src/
-│   │   ├── config/database.js  # Pool de conexão PostgreSQL
-│   │   ├── controllers/        # Lógica de negócio
-│   │   ├── middlewares/auth.js # Proteção de rotas (JWT)
-│   │   ├── models/             # Acesso ao banco
-│   │   ├── routes/             # Rotas Express
-│   │   └── app.js              # Ponto de entrada
-│   ├── uploads/                # Contratos de adoção
+│   │   ├── config/database.js    # Pool de conexão PostgreSQL
+│   │   ├── controllers/          # Lógica de negócio
+│   │   ├── middlewares/auth.js   # Proteção de rotas (JWT)
+│   │   ├── models/               # Acesso ao banco
+│   │   ├── routes/               # Rotas Express
+│   │   └── app.js                # Ponto de entrada
+│   ├── uploads/contracts/        # PDFs dos contratos de adoção
 │   ├── .env.example
 │   └── package.json
 ├── frontend/
 │   ├── public/
 │   │   ├── css/style.css
 │   │   ├── js/
-│   │   ├── images/             # Logos, favicon
-│   │   └── ...html             # Todas as páginas
+│   │   │   ├── api.js            # Cliente HTTP com prefixo /api
+│   │   │   ├── layout.js         # Navbar / sidebar / tema
+│   │   │   └── pages/            # Lógica por página
+│   │   └── images/               # Logos, favicon, screenshot
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── animais.html              # Lista de animais
+│   ├── animais-form.html         # Cadastro/edição + contratos
+│   ├── atividades.html           # Lista de atividades
+│   ├── atividades-form.html      # Cadastro/edição de atividades
+│   ├── historico.html            # Histórico clínico por animal
 │   └── 404.html
 └── README.md
 ```
@@ -57,7 +67,7 @@ ama-web-system/
 ### Pré-requisitos
 
 - Node.js 18+
-- PostgreSQL (ou conta no Supabase/Neon)
+- PostgreSQL (ou conta no Supabase / Neon)
 
 ### 1. Clone o repositório
 
@@ -99,11 +109,20 @@ Execute no SQL Editor do Supabase (ou via psql):
 
 ```bash
 cd backend
-npm run dev    # desenvolvimento (nodemon)
+npm run dev    # desenvolvimento (com nodemon)
 npm start      # produção
 ```
 
 Acesse: **http://localhost:3000**
+
+---
+
+## Login (Contas de Teste)
+
+| E-mail | Senha |
+|--------|-------|
+| `associacaoama25@gmail.com` | `AMA@2025#OngPalmira` |
+| `matheus@teste.com` | `teste123` |
 
 ---
 
@@ -131,14 +150,15 @@ Hospedado em: **[https://ama-web-system.onrender.com/](https://ama-web-system.on
 
 ## Funcionalidades
 
-- Login e logout com JWT
-- Dashboard com estatísticas em tempo real
-- **Animais** — cadastro, edição, listagem e remoção com fotos
-- **Histórico clínico** — registro de procedimentos por animal
-- **Atividades** — cadastro, edição, listagem e remoção
-- Tema claro/escuro com persistência
-- Interface responsiva (Bootstrap 5)
-- Logos e favicon personalizados
+- **Login e logout** com JWT, sessão persistente
+- **Dashboard** com estatísticas em tempo real (animais ativos, atividades agendadas, gráfico mensal, ações rápidas)
+- **Animais** — cadastro, edição, listagem e remoção com fotos; URLs amigáveis (`/animais/1`)
+- **Contratos de Adoção** — upload de PDF com múltiplos contratos por animal; visualização inline (modal com iframe) e download
+- **Histórico clínico** — registro de procedimentos por animal (`/historico/1`)
+- **Atividades** — cadastro, edição, listagem e remoção com filtros por status (Agendada/Realizada/Cancelada) e busca textual
+- **Tema claro/escuro** com persistência em `localStorage`
+- **Interface responsiva** — adaptada para desktop, tablet e mobile com offcanvas sidebar, tabelas com scroll horizontal e cards em grid
+- **Rotas em português** — `/animais`, `/atividades`, `/historico`
 
 ---
 
