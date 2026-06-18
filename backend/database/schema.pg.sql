@@ -66,9 +66,11 @@ CREATE TABLE IF NOT EXISTS activities (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Admin (senha: AMA@2025#OngPalmira)
+-- Admin: Maria (senha: AMA@2025#OngPalmira)
+-- Teste: Matheus (senha: teste123)
 INSERT INTO users (name, email, password) VALUES
-('Administrador', 'associacaoama25@gmail.com', '$2a$10$77Me64/Tg6hbuENCsUP0veA3Yaj/A0s0uFgGiz8iC6lv7btR17k.i')
+('Maria Eduarda', 'associacaoama25@gmail.com', '$2a$10$77Me64/Tg6hbuENCsUP0veA3Yaj/A0s0uFgGiz8iC6lv7btR17k.i'),
+('Matheus Pompeo', 'matheus@teste.com', '$2a$10$viCt0dgD4AzuQBqfFRg78e6UaW61FdguEviwF6l7HC1SxZaamogvi')
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO volunteers (name, email, phone, join_date, status) VALUES
