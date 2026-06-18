@@ -90,7 +90,7 @@
 
   // ── Sidebar pin ──────────────────────────────────────────────
   const STORAGE_KEY = 'ama-sidebar-pinned';
-  if (localStorage.getItem(STORAGE_KEY) !== '0') document.body.classList.add('sidebar-pinned');
+  if (localStorage.getItem(STORAGE_KEY) === '1') document.body.classList.add('sidebar-pinned');
 
   function updatePinIcon() {
     const pinned = document.body.classList.contains('sidebar-pinned');
