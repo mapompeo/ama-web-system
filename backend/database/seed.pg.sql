@@ -17,10 +17,6 @@ ALTER SEQUENCE activities_id_seq RESTART WITH 1;
 
 -- VOLUNTÁRIOS removidos (feature removida do projeto)
 
--- Contrato de exemplo para o animal Rex (id = 1)
-INSERT INTO adoption_contracts (animal_id, filename, original_name) VALUES
-(1, 'contract-1-1234567890.pdf', 'Contrato_Adocao_Rex.pdf');
-
 INSERT INTO beneficiaries (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES
 ('Rex',       'Cachorro', 'Vira-lata',        'Macho',            'Médio',   '2022-03-10', 'disponivel',    'Carlos Souza',    '(47) 99201-0001', 'Vacinado e castrado. Encontrado no bairro Garcia'),
 ('Mel',       'Cachorro', 'Golden Retriever', 'Fêmea',            'Grande',  '2021-07-15', 'adotado',       'Ana Lima',        '(47) 99201-0002', 'Adotada em março de 2024 pela família Lima'),
@@ -72,6 +68,10 @@ INSERT INTO beneficiaries (name, species, breed, sex, size, birth_date, status, 
 ('Melissa',   'Cachorro', 'Shih Tzu',         'Fêmea',            'Pequeno', '2023-09-12', 'adotado',       'Sofia Martins',   '(47) 99201-0025', 'Adotada em junho de 2025 por família de idosos'),
 ('Jack',      'Cachorro', 'Border Collie',    'Macho',            'Médio',   '2019-03-01', 'disponivel',    NULL,              NULL,              'Muito inteligente. Precisa de espaço e estímulos'),
 ('Pretinha',  'Gato',     'Vira-lata',        'Fêmea',            'Pequeno', '2024-07-30', 'disponivel',    NULL,              NULL,              'Pretinha filhote resgatada do telhado da sede');
+
+-- Contrato de exemplo para o animal Rex (id = 1)
+INSERT INTO adoption_contracts (animal_id, filename, original_name) VALUES
+(1, 'contract-1-1234567890.pdf', 'Contrato_Adocao_Rex.pdf');
 
 -- ============================================================
 -- HISTÓRICO / REGISTROS POR ANIMAL (60+ registros)
