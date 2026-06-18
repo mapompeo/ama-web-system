@@ -16,6 +16,14 @@ const AnimalRecord = {
     return rows[0].id;
   },
 
+  async update(id, { title, description, record_date }) {
+    const rows = await db.query(
+      'UPDATE animal_records SET title = $1, description = $2, record_date = $3 WHERE id = $4 RETURNING id',
+      [title, description || null, record_date, id]
+    );
+    return rows[0]?.id;
+  },
+
   async delete(id) {
     await db.query('DELETE FROM animal_records WHERE id = $1', [id]);
   }

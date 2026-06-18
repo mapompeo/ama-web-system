@@ -28,6 +28,19 @@ module.exports = {
     }
   },
 
+  async update(req, res) {
+    try {
+      const { title, record_date } = req.body;
+      if (!title?.trim()) return res.status(400).json({ error: 'Título é obrigatório.' });
+      if (!record_date) return res.status(400).json({ error: 'Data é obrigatória.' });
+      const id = await AnimalRecord.update(req.params.id, req.body);
+      if (!id) return res.status(404).json({ error: 'Registro não encontrado.' });
+      res.json({ id });
+    } catch (err) {
+      res.status(500).json({ error: 'Erro ao atualizar registro.' });
+    }
+  },
+
   async destroy(req, res) {
     try {
       await AnimalRecord.delete(req.params.id);

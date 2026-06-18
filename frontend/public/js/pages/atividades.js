@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
       const items = await api.get(`/activities?${params}`);
+      currentItems = items;
       const tbody = document.getElementById('tableBody');
       const count = document.getElementById('record-count');
       if (count) count.textContent = `${items.length} registro${items.length !== 1 ? 's' : ''}`;
@@ -112,10 +113,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   document.getElementById('exportBtn')?.addEventListener('click', () => {
-    const rows = Array.from(document.querySelectorAll('#tableBody tr')).map(tr => {
-      const cells = tr.querySelectorAll('td');
-      return Array.from(cells).slice(0, 5).map(td => td.textContent.trim());
-    });
+    const rows = currentItems.map(a => [
+      a.id,
+      a.title,
+      new Date(a.activity_date).toLocaleDateString('pt-BR'),
+      a.location || '—',
+      (STATUS_LABEL[a.status] || { label: a.status }).label,
+    ]);
     exportCSV(
       ['ID', 'Título', 'Data', 'Local', 'Status'],
       rows,

@@ -27,15 +27,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       pdfFrame.src = url;
       pdfModal.show();
     });
-    row.querySelector('.delete-btn').addEventListener('click', async () => {
-      if (!confirm('Remover este contrato?')) return;
-      try {
-        await api.delete(`/animais/${id}/contract/${c.id}`);
-        showToast('success', 'Contrato removido.');
-        await loadContracts(id);
-      } catch (err) {
-        showAlert('danger', 'Erro ao remover: ' + err.message);
-      }
+    row.querySelector('.delete-btn').addEventListener('click', () => {
+      const modal = document.getElementById('delContractModal');
+      modal.querySelector('.modal-body strong').textContent = c.original_name;
+      modal.querySelector('#delContractConfirm').dataset.contractId = c.id;
+      new bootstrap.Modal(modal).show();
     });
     return row;
   }
@@ -60,6 +56,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.getElementById('pdfModal')?.addEventListener('hidden.bs.modal', () => {
     pdfFrame.src = '';
+  });
+
+  document.getElementById('delContractConfirm')?.addEventListener('click', async function () {
+    const cid = this.dataset.contractId;
+    if (!cid) return;
+    try {
+      await api.delete(`/animais/${id}/contract/${cid}`);
+      showToast('success', 'Contrato removido.');
+      await loadContracts(id);
+    } catch (err) {
+      showAlert('danger', 'Erro ao remover: ' + err.message);
+    }
   });
 
   if (id) {
@@ -88,6 +96,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   contractInput?.addEventListener('change', async function () {
     const file = this.files[0];
     if (!file) return;
+    this.disabled = true;
+    showToast('info', 'Enviando contrato...');
     const fd = new FormData();
     fd.append('contract', file);
     try {
@@ -98,8 +108,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       await loadContracts(id);
     } catch (err) {
       showAlert('danger', 'Erro ao enviar contrato: ' + err.message);
+    } finally {
+      this.disabled = false;
+      this.value = '';
     }
-    this.value = '';
   });
 
   document.getElementById('loading').style.display = 'none';
@@ -135,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const msg = id ? 'Animal atualizado com sucesso!' : 'Animal cadastrado com sucesso!';
       sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg }));
-      window.location.href = '/animais';
+      window.location.href = `/animais/${animalId}`;
     } catch (err) {
       showAlert('danger', 'Erro ao salvar: ' + err.message);
       btn.disabled = false;

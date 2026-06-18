@@ -4,10 +4,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (!animalId) { window.location.href = '/animais'; return; }
 
+  let editingRecordId = null;
+  let cachedRecords  = [];
+
   const STATUS_LABEL = { disponivel: 'Disponível', adotado: 'Adotado', em_tratamento: 'Em tratamento', obito: 'Óbito' };
+
+  const form      = document.getElementById('record-form');
+  const submitBtn = form.querySelector('[type=submit]');
+  const cancelBtn = document.getElementById('record-cancel');
+
+  function resetEditForm() {
+    editingRecordId = null;
+    form.reset();
+    form.classList.remove('was-validated');
+    submitBtn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Salvar registro';
+  }
+
+  cancelBtn.addEventListener('click', resetEditForm);
+  document.getElementById('addRecordForm').addEventListener('hidden.bs.collapse', resetEditForm);
 
   async function loadData() {
     const { animal, records } = await api.get(`/animal-records?animal_id=${animalId}`);
+    cachedRecords = records;
 
     document.getElementById('crumb-name').textContent = animal.name;
     document.getElementById('page-title').textContent = `Histórico — ${animal.name}`;
@@ -43,11 +61,29 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="fw-semibold" style="font-size:.88rem;color:var(--text-heading)">${r.title}</div>
           ${r.description ? `<div style="font-size:.82rem;color:var(--text-muted);margin-top:.15rem">${r.description}</div>` : ''}
         </div>
-        <button class="btn btn-sm btn-outline-danger btn-delete-record align-self-start" data-id="${r.id}" title="Remover">
-          <i class="bi bi-trash"></i>
-        </button>
+        <div class="d-flex gap-1 align-self-start">
+          <button class="btn btn-sm btn-outline-secondary btn-edit-record" data-id="${r.id}" title="Editar">
+            <i class="bi bi-pencil"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger btn-delete-record" data-id="${r.id}" title="Remover">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
       </div>`;
     }).join('');
+
+    el.querySelectorAll('.btn-edit-record').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const rec = cachedRecords.find(r => r.id == btn.dataset.id);
+        if (!rec) return;
+        editingRecordId = rec.id;
+        document.getElementById('r-title').value = rec.title;
+        document.getElementById('r-description').value = rec.description || '';
+        document.getElementById('r-date').value = rec.record_date.split('T')[0];
+        submitBtn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Atualizar';
+        new bootstrap.Collapse(document.getElementById('addRecordForm'), { toggle: true }).show();
+      });
+    });
 
     el.querySelectorAll('.btn-delete-record').forEach(btn => {
       btn.addEventListener('click', async () => {
@@ -56,40 +92,48 @@ document.addEventListener('DOMContentLoaded', async () => {
           await api.delete(`/animal-records/${btn.dataset.id}`);
           showToast('success', 'Registro removido.');
           const { records: updated } = await api.get(`/animal-records?animal_id=${animalId}`);
+          cachedRecords = updated;
           renderRecords(updated);
         } catch (err) { showAlert('danger', 'Erro ao remover: ' + err.message); }
       });
     });
   }
 
-  const form = document.getElementById('record-form');
   form.addEventListener('submit', async e => {
     e.preventDefault();
     if (!form.checkValidity()) { form.classList.add('was-validated'); return; }
 
-    const btn = form.querySelector('[type=submit]');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Salvando...';
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Salvando...';
+
+    const payload = {
+      title:       document.getElementById('r-title').value.trim(),
+      description: document.getElementById('r-description').value.trim() || null,
+      record_date: document.getElementById('r-date').value,
+    };
 
     try {
-      await api.post('/animal-records', {
-        animal_id:   Number(animalId),
-        title:       document.getElementById('r-title').value.trim(),
-        description: document.getElementById('r-description').value.trim() || null,
-        record_date: document.getElementById('r-date').value,
-      });
+      if (editingRecordId) {
+        await api.put(`/animal-records/${editingRecordId}`, payload);
+        showToast('success', 'Registro atualizado com sucesso!');
+      } else {
+        await api.post('/animal-records', { ...payload, animal_id: Number(animalId) });
+        showToast('success', 'Registro adicionado com sucesso!');
+      }
 
       bootstrap.Collapse.getInstance(document.getElementById('addRecordForm'))?.hide();
-      form.reset(); form.classList.remove('was-validated');
+      resetEditForm();
 
-      showToast('success', 'Registro adicionado com sucesso!');
       const { records: updated } = await api.get(`/animal-records?animal_id=${animalId}`);
+      cachedRecords = updated;
       renderRecords(updated);
     } catch (err) {
       showAlert('danger', 'Erro ao salvar: ' + err.message);
     } finally {
-      btn.disabled = false;
-      btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Salvar registro';
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = editingRecordId
+        ? '<i class="bi bi-check-lg me-1"></i>Atualizar'
+        : '<i class="bi bi-check-lg me-1"></i>Salvar registro';
     }
   });
 
