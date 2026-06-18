@@ -22,20 +22,46 @@
       </ol></nav>
       <div class="page-header">
         <h1 class="page-title">Atividades</h1>
-        <a href="/activities-form" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Nova</a>
+        <a href="/atividades-form" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i>Nova</a>
       </div>
       <div id="alert-container"></div>
       <div class="card table-card">
-        <div class="card-header d-flex align-items-center gap-2 flex-wrap">
-          <div class="input-group input-group-sm" style="max-width:280px">
-            <span class="input-group-text"><i class="bi bi-search"></i></span>
-            <input type="text" id="tableSearch" class="form-control" placeholder="Buscar atividade..." />
-          </div>
-          <div class="ms-auto d-flex align-items-center gap-2">
-            <span class="text-muted" id="record-count" style="font-size:.78rem"></span>
-            <button id="exportBtn" class="btn btn-sm btn-outline-secondary">
-              <i class="bi bi-download me-1"></i>Exportar
+        <div class="card-header">
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <div class="input-group input-group-sm" style="max-width:280px">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input type="text" id="tableSearch" class="form-control" placeholder="Buscar atividade..." />
+            </div>
+
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="btnStatus"
+                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Status</button>
+              <ul class="dropdown-menu shadow-sm" style="min-width:160px">
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-status" value="agendada">
+                  <span class="badge bg-warning text-dark">Agendada</span>
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-status" value="realizada">
+                  <span class="badge bg-success">Realizada</span>
+                </label></li>
+                <li><label class="dropdown-item d-flex align-items-center gap-2 py-2">
+                  <input type="checkbox" class="form-check-input filter-status" value="cancelada">
+                  <span class="badge bg-danger">Cancelada</span>
+                </label></li>
+              </ul>
+            </div>
+
+            <button id="clearFilters" class="btn btn-sm btn-link text-danger p-0" style="display:none;font-size:.8rem">
+              <i class="bi bi-x-circle me-1"></i>Limpar filtros
             </button>
+
+            <div class="ms-auto d-flex align-items-center gap-2">
+              <span class="text-muted" id="record-count" style="font-size:.78rem"></span>
+              <button id="exportBtn" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-download me-1"></i>Exportar
+              </button>
+            </div>
           </div>
         </div>
         <div class="card-body">
@@ -73,6 +99,6 @@
   <script src="/js/api.js"></script>
   <script src="/js/layout.js"></script>
   <script src="/js/main.js"></script>
-  <script src="/js/pages/activities.js"></script>
+  <script src="/js/pages/atividades.js"></script>
 </body>
 </html>

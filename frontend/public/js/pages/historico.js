@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  const match    = window.location.pathname.match(/\/historico\/(\d+)/);
   const params   = new URLSearchParams(window.location.search);
-  const animalId = params.get('id');
+  const animalId = match ? match[1] : params.get('id');
 
-  if (!animalId) { window.location.href = '/beneficiaries'; return; }
+  if (!animalId) { window.location.href = '/animais'; return; }
 
   const STATUS_LABEL = { disponivel: 'Disponível', adotado: 'Adotado', em_tratamento: 'Em tratamento', obito: 'Óbito' };
 
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('animal-details').textContent =
       [animal.species, animal.breed, animal.sex, animal.size, STATUS_LABEL[animal.status] || animal.status]
         .filter(Boolean).join(' · ');
-    document.getElementById('edit-link').href = `/beneficiaries-form?id=${animalId}`;
+    document.getElementById('edit-link').href = `/animais/${animalId}`;
 
     renderRecords(records);
   }

@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       await api.get('/dashboard/stats');
 
     // ── Stat cards ────────────────────────────────────────────────
-    document.getElementById('stat-volunteers').textContent    = stats.volunteers;
     document.getElementById('stat-beneficiaries').textContent = stats.beneficiaries;
     document.getElementById('stat-upcoming').textContent      = stats.upcoming;
     document.getElementById('stat-total').textContent         = monthlyChart.reduce((a, b) => a + b, 0);

@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       renderTable(result.data);
       renderPagination(result.total, result.page, result.pages);
       const count = document.getElementById('record-count');
-      if (count) count.textContent = `${result.total} animal${result.total !== 1 ? 'is' : ''}`;
+      if (count) count.textContent = `${result.total} ${result.total !== 1 ? 'animais' : 'animal'}`;
     } catch (err) {
       showAlert('danger', 'Erro ao carregar animais: ' + err.message);
     }
@@ -72,22 +72,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     tbody.innerHTML = items.map(b => {
       const st   = STATUS_LABEL[b.status] || { label: b.status, cls: 'bg-secondary' };
-      const icon = b.species === 'Gato' ? 'bi-stars' : 'bi-hearts';
       const breed = b.breed
         ? `<div style="font-size:.78rem;color:var(--text-muted)">${b.breed}</div>` : '';
       return `<tr>
         <td class="text-muted">${b.id}</td>
+        <td><strong>${b.name}</strong></td>
         <td>
-          <div class="d-flex align-items-center gap-2">
-            <div style="width:36px;height:36px;border-radius:6px;background:var(--border-light);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--text-muted)"><i class="bi ${icon}"></i></div>
-            <strong>${b.name}</strong>
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center gap-1">
-            <i class="bi ${icon}" style="font-size:.82rem;color:var(--primary)"></i>
-            <span>${b.species}</span>
-          </div>
+          <span>${b.species}</span>
           ${breed}
         </td>
         <td>${b.sex || '—'}</td>
@@ -95,8 +86,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td>${b.responsible_name || '<span class="text-muted">—</span>'}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td class="text-end" style="white-space:nowrap">
-          <a href="/animal-history?id=${b.id}" class="btn btn-sm btn-outline-info me-1" title="Histórico"><i class="bi bi-clock-history"></i></a>
-          <a href="/beneficiaries-form?id=${b.id}" class="btn btn-sm btn-outline-secondary me-1"><i class="bi bi-pencil"></i></a>
+          <a href="/historico/${b.id}" class="btn btn-sm btn-outline-info me-1" title="Histórico"><i class="bi bi-clock-history"></i></a>
+          <a href="/animais/${b.id}" class="btn btn-sm btn-outline-secondary me-1"><i class="bi bi-pencil"></i></a>
           <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#delModal"
             data-id="${b.id}" data-name="${b.name}"><i class="bi bi-trash"></i></button>
         </td>

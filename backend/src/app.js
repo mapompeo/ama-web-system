@@ -25,7 +25,6 @@ app.use('/api/auth/login', loginLimiter);
 
 app.use('/api/auth',          require('./routes/auth'));
 app.use('/api/dashboard',     require('./middlewares/auth'), require('./routes/index'));
-app.use('/api/volunteers',    require('./middlewares/auth'), require('./routes/volunteers'));
 app.use('/api/beneficiaries', require('./middlewares/auth'), require('./routes/beneficiaries'));
 app.use('/api/activities',    require('./middlewares/auth'), require('./routes/activities'));
 app.use('/api/animal-records', require('./middlewares/auth'), require('./routes/animalRecords'));
@@ -35,6 +34,11 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.get('/', (req, res) => res.redirect('/login'));
 
 const frontend = path.join(__dirname, '..', '..', 'frontend');
+
+app.get('/animais/:id([0-9]+)', (req, res) => res.sendFile(path.join(frontend, 'animais-form.html')));
+app.get('/atividades/:id([0-9]+)',    (req, res) => res.sendFile(path.join(frontend, 'atividades-form.html')));
+app.get('/historico/:id([0-9]+)', (req, res) => res.sendFile(path.join(frontend, 'historico.html')));
+
 app.use(express.static(path.join(frontend, 'public')));
 app.use(express.static(frontend, { extensions: ['html'] }));
 

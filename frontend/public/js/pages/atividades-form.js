@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  const match = window.location.pathname.match(/\/atividades\/(\d+)/);
   const params = new URLSearchParams(window.location.search);
-  const id     = params.get('id');
+  const id     = match ? match[1] : params.get('id');
   const form     = document.getElementById('main-form');
   const title    = document.getElementById('page-title');
   const crumb    = document.getElementById('crumb-action');
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       else    { await api.post('/activities', data); }
       const msg = id ? 'Atividade atualizada com sucesso!' : 'Atividade cadastrada com sucesso!';
       sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg }));
-      window.location.href = '/activities';
+      window.location.href = '/atividades';
     } catch (err) {
       showAlert('danger', 'Erro ao salvar: ' + err.message);
       btn.disabled = false;

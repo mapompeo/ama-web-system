@@ -1,8 +1,21 @@
 const db = require('../config/database');
 
 const Activity = {
-  async findAll() {
-    return db.query('SELECT * FROM activities ORDER BY activity_date DESC');
+  async findAll({ search, status } = {}) {
+    let sql = 'SELECT * FROM activities WHERE 1=1';
+    const params = [];
+    if (search) {
+      params.push(`%${search}%`);
+      sql += ` AND (title ILIKE $${params.length} OR location ILIKE $${params.length} OR description ILIKE $${params.length})`;
+    }
+    if (status) {
+      const statuses = status.split(',');
+      const placeholders = statuses.map((_, i) => `$${params.length + i + 1}`);
+      sql += ` AND status IN (${placeholders.join(',')})`;
+      params.push(...statuses);
+    }
+    sql += ' ORDER BY activity_date DESC';
+    return db.query(sql, params);
   },
 
   async findById(id) {

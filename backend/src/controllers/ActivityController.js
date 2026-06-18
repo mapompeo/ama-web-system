@@ -3,7 +3,8 @@ const Activity = require('../models/Activity');
 module.exports = {
   async index(req, res) {
     try {
-      res.json(await Activity.findAll());
+      const { search, status } = req.query;
+      res.json(await Activity.findAll({ search, status }));
     } catch (err) {
       res.status(500).json({ error: 'Erro ao buscar atividades.' });
     }
