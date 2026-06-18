@@ -2,6 +2,8 @@
 -- AMA Web System — Schema PostgreSQL (Supabase / Render)
 -- ============================================================
 
+DROP TABLE IF EXISTS volunteers CASCADE;
+
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
