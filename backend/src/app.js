@@ -3,6 +3,7 @@ const express      = require('express');
 const cookieParser = require('cookie-parser');
 const path         = require('path');
 const rateLimit    = require('express-rate-limit');
+const fileUpload   = require('express-fileupload');
 
 const app = express();
 
@@ -11,8 +12,8 @@ app.set('trust proxy', 1);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(fileUpload());
 
-// Rate limiting no login: 10 tentativas / 15 min por IP
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
@@ -22,7 +23,6 @@ const loginLimiter = rateLimit({
 });
 app.use('/api/auth/login', loginLimiter);
 
-// API routes
 app.use('/api/auth',          require('./routes/auth'));
 app.use('/api/dashboard',     require('./middlewares/auth'), require('./routes/index'));
 app.use('/api/volunteers',    require('./middlewares/auth'), require('./routes/volunteers'));
@@ -30,21 +30,16 @@ app.use('/api/beneficiaries', require('./middlewares/auth'), require('./routes/b
 app.use('/api/activities',    require('./middlewares/auth'), require('./routes/activities'));
 app.use('/api/animal-records', require('./middlewares/auth'), require('./routes/animalRecords'));
 
-// Servir fotos dos animais
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
-// Redireciona raiz para o login
 app.get('/', (req, res) => res.redirect('/login'));
 
-// Serve frontend
 const frontend = path.join(__dirname, '..', '..', 'frontend');
 app.use(express.static(path.join(frontend, 'public')));
 app.use(express.static(frontend, { extensions: ['html'] }));
 
-// 404 API
 app.use('/api', (req, res) => res.status(404).json({ error: 'Rota não encontrada' }));
 
-// SPA fallback
 app.use((req, res) => res.sendFile(path.join(frontend, '404.html')));
 
 const PORT = process.env.PORT || 3000;

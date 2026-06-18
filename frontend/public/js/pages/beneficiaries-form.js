@@ -5,30 +5,75 @@ document.addEventListener('DOMContentLoaded', async () => {
   const title  = document.getElementById('page-title');
   const crumb  = document.getElementById('crumb-action');
 
+  const contractSection = document.getElementById('contract-section');
+  const contractCurrent = document.getElementById('contract-current');
+  const contractEmpty   = document.getElementById('contract-empty');
+  const contractName    = document.getElementById('contract-name');
+  const contractDownload = document.getElementById('contract-download');
+  const contractDelete  = document.getElementById('contract-delete');
+  const contractInput   = document.getElementById('f-contract');
+
+  async function loadContract(animalId) {
+    try {
+      const c = await api.get(`/beneficiaries/${animalId}/contract`);
+      contractCurrent.style.display = 'flex';
+      contractEmpty.style.display = 'none';
+      contractName.textContent = c.original_name;
+      contractDownload.href = `/uploads/contracts/${c.filename}`;
+    } catch {
+      contractCurrent.style.display = 'none';
+      contractEmpty.style.display = '';
+    }
+  }
+
   if (id) {
     try {
       const b = await api.get(`/beneficiaries/${id}`);
       title.textContent = crumb.textContent = 'Editar Animal';
 
-      document.getElementById('f-name').value             = b.name              || '';
-      document.getElementById('f-species').value          = b.species           || 'Cachorro';
-      document.getElementById('f-breed').value            = b.breed             || '';
-      document.getElementById('f-sex').value              = b.sex               || 'Não identificado';
-      document.getElementById('f-size').value             = b.size              || '';
-      document.getElementById('f-status').value           = b.status            || 'disponivel';
-      document.getElementById('f-responsible').value      = b.responsible_name  || '';
-      document.getElementById('f-responsible-phone').value= b.responsible_phone || '';
-      document.getElementById('f-notes').value            = b.notes             || '';
+      document.getElementById('f-name').value              = b.name              || '';
+      document.getElementById('f-species').value           = b.species           || 'Cachorro';
+      document.getElementById('f-breed').value             = b.breed             || '';
+      document.getElementById('f-sex').value               = b.sex               || 'Não identificado';
+      document.getElementById('f-size').value              = b.size              || '';
+      document.getElementById('f-status').value            = b.status            || 'disponivel';
+      document.getElementById('f-responsible').value       = b.responsible_name  || '';
+      document.getElementById('f-responsible-phone').value = b.responsible_phone || '';
+      document.getElementById('f-notes').value             = b.notes             || '';
       if (b.birth_date) {
         document.getElementById('f-birth-date').value = new Date(b.birth_date).toISOString().split('T')[0];
       }
-      // Mostrar foto atual
-      if (b.photo_url) {
-        const preview = document.getElementById('photo-preview');
-        if (preview) { preview.src = b.photo_url; preview.style.display = ''; }
-      }
+
+      contractSection.style.display = '';
+      await loadContract(id);
     } catch (err) { showAlert('danger', 'Erro ao carregar: ' + err.message); }
   }
+
+  contractDelete?.addEventListener('click', async () => {
+    if (!confirm('Remover contrato de adoção?')) return;
+    try {
+      await api.delete(`/beneficiaries/${id}/contract`);
+      showToast('success', 'Contrato removido.');
+      await loadContract(id);
+    } catch (err) { showAlert('danger', 'Erro ao remover: ' + err.message); }
+  });
+
+  contractInput?.addEventListener('change', async function () {
+    const file = this.files[0];
+    if (!file) return;
+    const fd = new FormData();
+    fd.append('contract', file);
+    try {
+      await fetch(`/api/beneficiaries/${id}/contract`, {
+        method: 'POST', body: fd, credentials: 'include'
+      });
+      showToast('success', 'Contrato enviado com sucesso!');
+      await loadContract(id);
+    } catch (err) {
+      showAlert('danger', 'Erro ao enviar contrato: ' + err.message);
+    }
+    this.value = '';
+  });
 
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = '';
@@ -60,20 +105,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       let animalId = id;
       if (id) { await api.put(`/beneficiaries/${id}`, data); }
       else    { const saved = await api.post('/beneficiaries', data); animalId = saved.id; }
-
-      // Upload foto se selecionada
-      const photoInput = document.getElementById('f-photo');
-      if (photoInput?.files?.length) {
-        const fd = new FormData();
-        fd.append('photo', photoInput.files[0]);
-        const r = await fetch(`/api/beneficiaries/${animalId}/photo`, {
-          method: 'POST', body: fd, credentials: 'include'
-        });
-        if (!r.ok) {
-          const body = await r.json().catch(() => ({}));
-          throw new Error(body.error || `Falha no upload (HTTP ${r.status})`);
-        }
-      }
 
       const msg = id ? 'Animal atualizado com sucesso!' : 'Animal cadastrado com sucesso!';
       sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg }));

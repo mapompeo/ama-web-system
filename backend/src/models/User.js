@@ -7,11 +7,11 @@ const User = {
     return rows[0] || null;
   },
 
-  async create({ name, email, password, role = 'volunteer' }) {
+  async create({ name, email, password }) {
     const hash = await bcrypt.hash(password, 10);
     const rows = await db.query(
-      'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id',
-      [name, email, hash, role]
+      'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id',
+      [name, email, hash]
     );
     return rows[0].id;
   },

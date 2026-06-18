@@ -12,7 +12,7 @@ module.exports = {
       if (!user || !(await User.comparePassword(password, user.password))) {
         return res.status(401).json({ error: 'E-mail ou senha inválidos.' });
       }
-      const payload = { id: user.id, name: user.name, role: user.role };
+      const payload = { id: user.id, name: user.name };
       const token   = jwt.sign(payload, SECRET, { expiresIn: '8h' });
       res.cookie('token', token, COOKIE_OPTS);
       res.json({ user: payload });
@@ -31,8 +31,8 @@ module.exports = {
     const token = req.cookies?.token;
     if (!token) return res.status(401).json({ error: 'Não autenticado' });
     try {
-      const { id, name, role } = jwt.verify(token, SECRET);
-      res.json({ user: { id, name, role } });
+      const { id, name } = jwt.verify(token, SECRET);
+      res.json({ user: { id, name } });
     } catch {
       res.clearCookie('token');
       res.status(401).json({ error: 'Sessão expirada. Faça login novamente.' });

@@ -45,17 +45,6 @@ module.exports = {
     }
   },
 
-  async uploadPhoto(req, res) {
-    try {
-      if (!req.file) return res.status(400).json({ error: 'Nenhuma imagem enviada.' });
-      const photoUrl = `/uploads/animals/${req.file.filename}`;
-      await Beneficiary.updatePhoto(req.params.id, photoUrl);
-      res.json({ photo_url: photoUrl });
-    } catch (err) {
-      res.status(500).json({ error: 'Erro ao salvar foto.' });
-    }
-  },
-
   async destroy(req, res) {
     try {
       await Beneficiary.delete(req.params.id);

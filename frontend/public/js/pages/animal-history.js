@@ -9,23 +9,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function loadData() {
     const { animal, records } = await api.get(`/animal-records?animal_id=${animalId}`);
 
-    // Breadcrumb + título
     document.getElementById('crumb-name').textContent = animal.name;
     document.getElementById('page-title').textContent = `Histórico — ${animal.name}`;
 
-    // Card do animal
-    if (animal.photo_url) {
-      const img = document.getElementById('animal-photo');
-      img.src = animal.photo_url; img.style.display = '';
-      document.getElementById('animal-photo-placeholder').style.display = 'none';
-    }
     document.getElementById('animal-name').textContent = animal.name;
     document.getElementById('animal-details').textContent =
       [animal.species, animal.breed, animal.sex, animal.size, STATUS_LABEL[animal.status] || animal.status]
         .filter(Boolean).join(' · ');
     document.getElementById('edit-link').href = `/beneficiaries-form?id=${animalId}`;
 
-    // Lista de registros
     renderRecords(records);
   }
 
@@ -70,7 +62,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // Formulário de novo registro
   const form = document.getElementById('record-form');
   form.addEventListener('submit', async e => {
     e.preventDefault();
@@ -88,7 +79,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         record_date: document.getElementById('r-date').value,
       });
 
-      // Fechar form + limpar
       bootstrap.Collapse.getInstance(document.getElementById('addRecordForm'))?.hide();
       form.reset(); form.classList.remove('was-validated');
 
@@ -103,7 +93,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Iniciar
   try {
     await loadData();
     document.getElementById('loading').style.display = 'none';

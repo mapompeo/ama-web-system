@@ -54,10 +54,6 @@ const Beneficiary = {
     );
   },
 
-  async updatePhoto(id, photo_url) {
-    await db.query('UPDATE beneficiaries SET photo_url = $1 WHERE id = $2', [photo_url, id]);
-  },
-
   async delete(id) {
     await db.query('DELETE FROM beneficiaries WHERE id = $1', [id]);
   },

@@ -75,14 +75,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const icon = b.species === 'Gato' ? 'bi-stars' : 'bi-hearts';
       const breed = b.breed
         ? `<div style="font-size:.78rem;color:var(--text-muted)">${b.breed}</div>` : '';
-      const photo = b.photo_url
-        ? `<img src="${b.photo_url}" alt="${b.name}" style="width:36px;height:36px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">`
-        : `<div style="width:36px;height:36px;border-radius:6px;background:var(--border-light);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--text-muted)"><i class="bi ${icon}"></i></div>`;
       return `<tr>
         <td class="text-muted">${b.id}</td>
         <td>
           <div class="d-flex align-items-center gap-2">
-            ${photo}
+            <div style="width:36px;height:36px;border-radius:6px;background:var(--border-light);display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--text-muted)"><i class="bi ${icon}"></i></div>
             <strong>${b.name}</strong>
           </div>
         </td>
@@ -144,12 +141,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     el.appendChild(wrap);
   }
 
-  // Filtros — checkboxes
   document.querySelectorAll('.filter-species, .filter-status, .filter-size').forEach(cb => {
     cb.addEventListener('change', () => { updateFilterUI(); load(1); });
   });
 
-  // Search com debounce
   let searchTimer;
   document.getElementById('tableSearch').addEventListener('input', () => {
     clearTimeout(searchTimer);
@@ -157,7 +152,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     searchTimer = setTimeout(() => load(1), 350);
   });
 
-  // Limpar todos os filtros
   document.getElementById('clearFilters').addEventListener('click', () => {
     document.querySelectorAll('.filter-species, .filter-status, .filter-size').forEach(cb => cb.checked = false);
     document.getElementById('tableSearch').value = '';
@@ -165,7 +159,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     load(1);
   });
 
-  // Exportar CSV
   document.getElementById('exportBtn').addEventListener('click', async () => {
     try {
       const f = getFilters();
@@ -184,7 +177,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (err) { showAlert('danger', 'Erro ao exportar: ' + err.message); }
   });
 
-  // Modal de exclusão
   document.getElementById('delModal').addEventListener('show.bs.modal', e => {
     const btn = e.relatedTarget;
     document.getElementById('del-name').textContent = btn.dataset.name;
@@ -199,7 +191,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (err) { showAlert('danger', 'Erro ao remover: ' + err.message); }
   });
 
-  // Iniciar
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = '';
   await load(1);
