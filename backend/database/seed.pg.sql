@@ -7,70 +7,19 @@ DELETE FROM adoption_contracts;
 DELETE FROM animal_records;
 DELETE FROM activities;
 DELETE FROM beneficiaries;
-DELETE FROM volunteers;
 DELETE FROM users WHERE email NOT IN ('associacaoama25@gmail.com', 'matheus@teste.com');
 
 ALTER SEQUENCE users_id_seq RESTART WITH 3;
-ALTER SEQUENCE volunteers_id_seq RESTART WITH 1;
 ALTER SEQUENCE beneficiaries_id_seq RESTART WITH 1;
 ALTER SEQUENCE animal_records_id_seq RESTART WITH 1;
 ALTER SEQUENCE adoption_contracts_id_seq RESTART WITH 1;
 ALTER SEQUENCE activities_id_seq RESTART WITH 1;
 
--- ============================================================
--- VOLUNTÁRIOS (50 registros)
--- ============================================================
-INSERT INTO volunteers (name, email, phone, cpf, address, join_date, status) VALUES
-('Maria Silva',          'maria.silva@email.com',       '(47) 99101-0001', '123.456.789-01', 'Rua das Flores, 10, Blumenau',           '2022-01-15', 'ativo'),
-('João Santos',          'joao.santos@email.com',       '(47) 99101-0002', '123.456.789-02', 'Av. Brasil, 200, Blumenau',              '2022-02-10', 'ativo'),
-('Ana Oliveira',         'ana.oliveira@email.com',      '(47) 99101-0003', '123.456.789-03', 'Rua 7 de Setembro, 45, Blumenau',        '2022-03-05', 'ativo'),
-('Carlos Pereira',       'carlos.pereira@email.com',    '(47) 99101-0004', '123.456.789-04', 'Rua XV de Novembro, 88, Blumenau',       '2022-04-20', 'ativo'),
-('Fernanda Costa',       'fernanda.costa@email.com',    '(47) 99101-0005', '123.456.789-05', 'Rua Hercílio Luz, 33, Blumenau',         '2022-05-11', 'ativo'),
-('Ricardo Almeida',      'ricardo.almeida@email.com',   '(47) 99101-0006', '123.456.789-06', 'Av. Beira Rio, 120, Blumenau',           '2022-06-08', 'ativo'),
-('Juliana Martins',      'juliana.martins@email.com',   '(47) 99101-0007', '123.456.789-07', 'Rua Dom Pedro II, 67, Blumenau',         '2022-07-19', 'ativo'),
-('Paulo Rodrigues',      'paulo.rodrigues@email.com',   '(47) 99101-0008', '123.456.789-08', 'Rua Nereu Ramos, 15, Blumenau',          '2022-08-03', 'ativo'),
-('Camila Ferreira',      'camila.ferreira@email.com',   '(47) 99101-0009', '123.456.789-09', 'Rua Almirante Barroso, 22, Blumenau',    '2022-09-14', 'ativo'),
-('Lucas Gomes',          'lucas.gomes@email.com',       '(47) 99101-0010', '123.456.789-10', 'Av. Presidente Vargas, 300, Blumenau',   '2022-10-01', 'ativo'),
-('Beatriz Lima',         'beatriz.lima@email.com',      '(47) 99101-0011', '123.456.789-11', 'Rua Floriano Peixoto, 55, Blumenau',    '2022-11-22', 'ativo'),
-('Diego Souza',          'diego.souza@email.com',       '(47) 99101-0012', '123.456.789-12', 'Rua Santos Dumont, 77, Blumenau',       '2022-12-10', 'ativo'),
-('Larissa Barbosa',      'larissa.barbosa@email.com',   '(47) 99101-0013', '123.456.789-13', 'Rua Joinville, 90, Blumenau',           '2023-01-07', 'ativo'),
-('Marcos Carvalho',      'marcos.carvalho@email.com',   '(47) 99101-0014', '123.456.789-14', 'Av. Getúlio Vargas, 140, Blumenau',     '2023-02-18', 'ativo'),
-('Patrícia Mendes',      'patricia.mendes@email.com',   '(47) 99101-0015', '123.456.789-15', 'Rua Itajaí, 28, Blumenau',              '2023-03-25', 'ativo'),
-('Felipe Nascimento',    'felipe.nascimento@email.com', '(47) 99101-0016', '123.456.789-16', 'Rua Gaspar, 11, Blumenau',              '2023-04-12', 'ativo'),
-('Vanessa Teixeira',     'vanessa.teixeira@email.com',  '(47) 99101-0017', '123.456.789-17', 'Rua Pomerode, 63, Blumenau',            '2023-05-30', 'ativo'),
-('Rodrigo Araújo',       'rodrigo.araujo@email.com',    '(47) 99101-0018', '123.456.789-18', 'Av. Castelo Branco, 210, Blumenau',     '2023-06-09', 'ativo'),
-('Amanda Cardoso',       'amanda.cardoso@email.com',    '(47) 99101-0019', '123.456.789-19', 'Rua Brusque, 50, Blumenau',             '2023-07-21', 'ativo'),
-('Thiago Ribeiro',       'thiago.ribeiro@email.com',    '(47) 99101-0020', '123.456.789-20', 'Rua Indaial, 38, Blumenau',             '2023-08-14', 'ativo'),
-('Isabela Cunha',        'isabela.cunha@email.com',     '(47) 99101-0021', '123.456.789-21', 'Rua Timbó, 74, Blumenau',              '2023-09-03', 'ativo'),
-('Gabriel Monteiro',     'gabriel.monteiro@email.com',  '(47) 99101-0022', '123.456.789-22', 'Rua Apiúna, 19, Blumenau',              '2023-10-17', 'inativo'),
-('Natália Freitas',      'natalia.freitas@email.com',   '(47) 99101-0023', '123.456.789-23', 'Rua Ascurra, 82, Blumenau',             '2023-11-06', 'ativo'),
-('Leonardo Pinto',       'leonardo.pinto@email.com',    '(47) 99101-0024', '123.456.789-24', 'Rua Rodeio, 47, Blumenau',              '2023-12-20', 'ativo'),
-('Priscila Castro',      'priscila.castro@email.com',   '(47) 99101-0025', '123.456.789-25', 'Rua Guabiruba, 93, Blumenau',           '2024-01-11', 'ativo'),
-('Eduardo Moreira',      'eduardo.moreira@email.com',   '(47) 99101-0026', '123.456.789-26', 'Av. Sete de Setembro, 160, Blumenau',   '2024-02-28', 'ativo'),
-('Aline Batista',        'aline.batista@email.com',     '(47) 99101-0027', '123.456.789-27', 'Rua Luís Delfino, 35, Blumenau',        '2024-03-15', 'ativo'),
-('Renato Dias',          'renato.dias@email.com',       '(47) 99101-0028', '123.456.789-28', 'Rua Victor Konder, 58, Blumenau',       '2024-04-07', 'inativo'),
-('Simone Nunes',         'simone.nunes@email.com',      '(47) 99101-0029', '123.456.789-29', 'Rua Gustavo Rau, 41, Blumenau',         '2024-05-19', 'ativo'),
-('Vinícius Lopes',       'vinicius.lopes@email.com',    '(47) 99101-0030', '123.456.789-30', 'Rua Fritz Muller, 26, Blumenau',        '2024-06-02', 'ativo'),
-('Tatiana Barbosa',      'tatiana.barbosa@email.com',   '(47) 99101-0031', '123.456.789-31', 'Rua São Paulo, 112, Blumenau',          '2024-07-14', 'ativo'),
-('André Luiz Campos',    'andre.campos@email.com',      '(47) 99101-0032', '123.456.789-32', 'Rua Bahia, 54, Blumenau',               '2024-08-21', 'ativo'),
-('Carolina Dias',        'carolina.dias@email.com',     '(47) 99101-0033', '123.456.789-33', 'Rua Paraíba, 77, Blumenau',             '2024-09-09', 'ativo'),
-('Bruno Oliveira',       'bruno.oliveira@email.com',    '(47) 99101-0034', '123.456.789-34', 'Rua Ceará, 33, Blumenau',               '2024-10-18', 'ativo'),
-('Letícia Rocha',        'leticia.rocha@email.com',     '(47) 99101-0035', '123.456.789-35', 'Rua Maranhão, 21, Blumenau',            '2024-11-05', 'inativo'),
-('Rafael Martins',       'rafael.martins@email.com',    '(47) 99101-0036', '123.456.789-36', 'Av. Rio Branco, 180, Blumenau',         '2025-01-10', 'ativo'),
-('Jéssica Correia',      'jessica.correia@email.com',   '(47) 99101-0037', '123.456.789-37', 'Rua Paraná, 66, Blumenau',             '2025-01-22', 'ativo'),
-('Gustavo Henrique',     'gustavo.h@email.com',         '(47) 99101-0038', '123.456.789-38', 'Rua Santa Catarina, 44, Blumenau',      '2025-02-03', 'ativo'),
-('Luciana Torres',       'luciana.torres@email.com',    '(47) 99101-0039', '123.456.789-39', 'Rua Minas Gerais, 88, Blumenau',        '2025-02-19', 'ativo'),
-('Fábio Azevedo',        'fabio.azevedo@email.com',     '(47) 99101-0040', '123.456.789-40', 'Rua Rio de Janeiro, 55, Blumenau',      '2025-03-07', 'ativo'),
-('Mariana Santana',      'mariana.santana@email.com',   '(47) 99101-0041', '123.456.789-41', 'Rua Espírito Santo, 29, Blumenau',      '2025-03-20', 'ativo'),
-('Roberto Carlos',       'roberto.carlos@email.com',    '(47) 99101-0042', '123.456.789-42', 'Rua Amazonas, 150, Blumenau',           '2025-04-01', 'ativo'),
-('Daniela Rangel',       'daniela.rangel@email.com',    '(47) 99101-0043', '123.456.789-43', 'Rua Goiás, 72, Blumenau',               '2025-04-15', 'inativo'),
-('Pedro Augusto',        'pedro.augusto@email.com',     '(47) 99101-0044', '123.456.789-44', 'Rua Rio Grande, 38, Blumenau',          '2025-05-02', 'ativo'),
-('Cristiane Barbosa',    'cristiane.b@email.com',       '(47) 99101-0045', '123.456.789-45', 'Rua Alagoas, 91, Blumenau',             '2025-05-18', 'ativo'),
-('Alexandre Pires',      'alexandre.pires@email.com',   '(47) 99101-0046', '123.456.789-46', 'Av. Central, 250, Blumenau',            '2025-06-01', 'ativo'),
-('Jaqueline Freitas',    'jaqueline.f@email.com',       '(47) 99101-0047', '123.456.789-47', 'Rua Piauí, 17, Blumenau',               '2025-06-10', 'ativo'),
-('Maurício Duarte',      'mauricio.duarte@email.com',   '(47) 99101-0048', '123.456.789-48', 'Rua Sergipe, 63, Blumenau',             '2025-06-22', 'ativo'),
-('Sandra Vieira',        'sandra.vieira@email.com',     '(47) 99101-0049', '123.456.789-49', 'Rua Rondônia, 42, Blumenau',            '2025-07-05', 'ativo'),
-('Otávio Nunes',         'otavio.nunes@email.com',      '(47) 99101-0050', '123.456.789-50', 'Rua Tocantins, 85, Blumenau',           '2025-07-15', 'ativo');
+-- VOLUNTÁRIOS removidos (feature removida do projeto)
+
+-- Contrato de exemplo para o animal Rex (id = 1)
+INSERT INTO adoption_contracts (animal_id, filename, original_name) VALUES
+(1, 'contract-1-1234567890.pdf', 'Contrato_Adocao_Rex.pdf');
 
 INSERT INTO beneficiaries (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES
 ('Rex',       'Cachorro', 'Vira-lata',        'Macho',            'Médio',   '2022-03-10', 'disponivel',    'Carlos Souza',    '(47) 99201-0001', 'Vacinado e castrado. Encontrado no bairro Garcia'),

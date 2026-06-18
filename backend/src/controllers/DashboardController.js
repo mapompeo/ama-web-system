@@ -1,4 +1,3 @@
-const Volunteer   = require('../models/Volunteer');
 const Beneficiary = require('../models/Beneficiary');
 const Activity    = require('../models/Activity');
 
@@ -7,11 +6,10 @@ module.exports = {
     try {
       const year = new Date().getFullYear();
       const [
-        volunteers, beneficiaries, upcoming,
+        beneficiaries, upcoming,
         recentActivities, monthlyChart, upcomingActivities, activityStatus,
         animalsBySpecies, animalsByAdoptionStatus
       ] = await Promise.all([
-        Volunteer.count(),
         Beneficiary.count(),
         Activity.countUpcoming(),
         Activity.findRecent(5),
@@ -23,7 +21,7 @@ module.exports = {
       ]);
 
       res.json({
-        stats: { volunteers, beneficiaries, upcoming },
+        stats: { beneficiaries, upcoming },
         recentActivities,
         monthlyChart,
         chartYear: year,

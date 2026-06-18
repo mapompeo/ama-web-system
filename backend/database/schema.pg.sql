@@ -10,18 +10,6 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS volunteers (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(150),
-  phone VARCHAR(20),
-  cpf VARCHAR(14),
-  address VARCHAR(255),
-  join_date DATE,
-  status VARCHAR(10) NOT NULL DEFAULT 'ativo' CHECK (status IN ('ativo', 'inativo')),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE IF NOT EXISTS beneficiaries (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -49,7 +37,7 @@ CREATE TABLE IF NOT EXISTS animal_records (
 
 CREATE TABLE IF NOT EXISTS adoption_contracts (
   id SERIAL PRIMARY KEY,
-  animal_id INT NOT NULL UNIQUE,
+  animal_id INT NOT NULL,
   filename VARCHAR(255) NOT NULL,
   original_name VARCHAR(255) NOT NULL,
   uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -72,11 +60,6 @@ INSERT INTO users (name, email, password) VALUES
 ('Maria Eduarda', 'associacaoama25@gmail.com', '$2a$10$77Me64/Tg6hbuENCsUP0veA3Yaj/A0s0uFgGiz8iC6lv7btR17k.i'),
 ('Matheus Pompeo', 'matheus@teste.com', '$2a$10$viCt0dgD4AzuQBqfFRg78e6UaW61FdguEviwF6l7HC1SxZaamogvi')
 ON CONFLICT (email) DO NOTHING;
-
-INSERT INTO volunteers (name, email, phone, join_date, status) VALUES
-('Maria Silva', 'maria@email.com', '(47) 99000-0001', '2024-01-10', 'ativo'),
-('João Santos', 'joao@email.com', '(47) 99000-0002', '2024-02-15', 'ativo'),
-('Ana Oliveira', 'ana@email.com', '(47) 99000-0003', '2024-03-20', 'ativo');
 
 INSERT INTO beneficiaries (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES
 ('Rex', 'Cachorro', 'Vira-lata', 'Macho', 'Médio', '2022-03-10', 'disponivel', 'Carlos Souza', '(47) 99000-0010', 'Vacinado e castrado'),
