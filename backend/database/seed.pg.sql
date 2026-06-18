@@ -8,7 +8,7 @@ DELETE FROM animal_records;
 DELETE FROM activities;
 DELETE FROM beneficiaries;
 DELETE FROM volunteers;
-DELETE FROM users WHERE email NOT IN ('adm@email.com');
+DELETE FROM users WHERE email NOT IN ('associacaoama25@gmail.com');
 
 ALTER SEQUENCE users_id_seq RESTART WITH 2;
 ALTER SEQUENCE volunteers_id_seq RESTART WITH 1;

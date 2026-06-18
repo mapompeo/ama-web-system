@@ -33,7 +33,7 @@ ama-web-system/
 │   │   ├── models/             # Acesso ao banco
 │   │   ├── routes/             # Rotas Express
 │   │   └── app.js              # Ponto de entrada
-│   ├── uploads/                # Fotos dos animais
+│   ├── uploads/                # Contratos de adoção
 │   ├── .env.example
 │   └── package.json
 ├── frontend/
