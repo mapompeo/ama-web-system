@@ -8,11 +8,10 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 module.exports = {
   async show(req, res) {
     try {
-      const contract = await AdoptionContract.findByAnimal(req.params.id);
-      if (!contract) return res.status(404).json({ error: 'Nenhum contrato encontrado.' });
-      res.json(contract);
+      const contracts = await AdoptionContract.findByAnimal(req.params.id);
+      res.json(contracts);
     } catch (err) {
-      res.status(500).json({ error: 'Erro ao buscar contrato.' });
+      res.status(500).json({ error: 'Erro ao buscar contratos.' });
     }
   },
 
@@ -33,20 +32,13 @@ module.exports = {
 
       await file.mv(filepath);
 
-      const existing = await AdoptionContract.findByAnimal(req.params.id);
-      if (existing) {
-        const oldPath = path.join(uploadDir, existing.filename);
-        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-        await AdoptionContract.delete(req.params.id);
-      }
-
-      await AdoptionContract.create({
+      const id = await AdoptionContract.create({
         animal_id: req.params.id,
         filename,
         original_name: file.name
       });
 
-      res.json({ contract_url: `/uploads/contracts/${filename}`, original_name: file.name });
+      res.json({ id, contract_url: `/uploads/contracts/${filename}`, original_name: file.name });
     } catch (err) {
       res.status(500).json({ error: 'Erro ao salvar contrato.' });
     }
@@ -54,8 +46,9 @@ module.exports = {
 
   async destroy(req, res) {
     try {
-      const contract = await AdoptionContract.delete(req.params.id);
-      if (!contract) return res.status(404).json({ error: 'Nenhum contrato encontrado.' });
+      const contract = await AdoptionContract.findById(req.params.contractId);
+      if (!contract) return res.status(404).json({ error: 'Contrato não encontrado.' });
+      await AdoptionContract.delete(req.params.contractId);
       const filepath = path.join(uploadDir, contract.filename);
       if (fs.existsSync(filepath)) fs.unlinkSync(filepath);
       res.json({ ok: true });

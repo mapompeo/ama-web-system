@@ -8,8 +8,8 @@ router.get('/:id', ctrl.show);
 router.put('/:id', ctrl.update);
 router.delete('/:id', ctrl.destroy);
 
-router.get('/:id/contract',    contractCtrl.show);
-router.post('/:id/contract',   contractCtrl.upload);
-router.delete('/:id/contract', contractCtrl.destroy);
+router.get('/:id/contract',               contractCtrl.show);
+router.post('/:id/contract',               contractCtrl.upload);
+router.delete('/:id/contract/:contractId', contractCtrl.destroy);
 
 module.exports = router;

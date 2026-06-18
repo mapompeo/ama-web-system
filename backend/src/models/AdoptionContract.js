@@ -2,7 +2,14 @@ const db = require('../config/database');
 
 const AdoptionContract = {
   async findByAnimal(animalId) {
-    const rows = await db.query('SELECT * FROM adoption_contracts WHERE animal_id = $1', [animalId]);
+    return db.query(
+      'SELECT * FROM adoption_contracts WHERE animal_id = $1 ORDER BY uploaded_at DESC',
+      [animalId]
+    );
+  },
+
+  async findById(id) {
+    const rows = await db.query('SELECT * FROM adoption_contracts WHERE id = $1', [id]);
     return rows[0] || null;
   },
 
@@ -15,10 +22,10 @@ const AdoptionContract = {
     return rows[0].id;
   },
 
-  async delete(animalId) {
+  async delete(id) {
     const rows = await db.query(
-      'DELETE FROM adoption_contracts WHERE animal_id = $1 RETURNING filename',
-      [animalId]
+      'DELETE FROM adoption_contracts WHERE id = $1 RETURNING *',
+      [id]
     );
     return rows[0] || null;
   }
