@@ -25,7 +25,7 @@ app.use('/api/auth/login', loginLimiter);
 
 app.use('/api/auth',          require('./routes/auth'));
 app.use('/api/dashboard',     require('./middlewares/auth'), require('./routes/index'));
-app.use('/api/beneficiaries', require('./middlewares/auth'), require('./routes/beneficiaries'));
+app.use('/api/animais', require('./middlewares/auth'), require('./routes/animals'));
 app.use('/api/activities',    require('./middlewares/auth'), require('./routes/activities'));
 app.use('/api/animal-records', require('./middlewares/auth'), require('./routes/animalRecords'));
 

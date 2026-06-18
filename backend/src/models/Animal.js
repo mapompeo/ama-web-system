@@ -1,6 +1,6 @@
 const db = require('../config/database');
 
-const Beneficiary = {
+const Animal = {
   async findAll({ page = 1, limit = 20, species, status, size, search } = {}) {
     const conditions = [];
     const params = [];
@@ -15,12 +15,12 @@ const Beneficiary = {
 
     const where = conditions.length ? 'WHERE ' + conditions.join(' AND ') : '';
 
-    const countRows = await db.query(`SELECT COUNT(*) AS total FROM beneficiaries ${where}`, params);
+    const countRows = await db.query(`SELECT COUNT(*) AS total FROM animals ${where}`, params);
     const total  = Number(countRows[0].total);
     const offset = (Number(page) - 1) * Number(limit);
 
     const data = await db.query(
-      `SELECT * FROM beneficiaries ${where} ORDER BY name LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+      `SELECT * FROM animals ${where} ORDER BY name LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
       [...params, Number(limit), offset]
     );
 
@@ -28,13 +28,13 @@ const Beneficiary = {
   },
 
   async findById(id) {
-    const rows = await db.query('SELECT * FROM beneficiaries WHERE id = $1', [id]);
+    const rows = await db.query('SELECT * FROM animals WHERE id = $1', [id]);
     return rows[0] || null;
   },
 
   async create({ name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes }) {
     const rows = await db.query(
-      `INSERT INTO beneficiaries
+      `INSERT INTO animals
          (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`,
       [name, species || 'Cachorro', breed || null, sex || 'Não identificado', size || null,
@@ -45,7 +45,7 @@ const Beneficiary = {
 
   async update(id, { name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes }) {
     await db.query(
-      `UPDATE beneficiaries SET
+      `UPDATE animals SET
          name=$1, species=$2, breed=$3, sex=$4, size=$5, birth_date=$6,
          status=$7, responsible_name=$8, responsible_phone=$9, notes=$10
        WHERE id=$11`,
@@ -55,25 +55,25 @@ const Beneficiary = {
   },
 
   async delete(id) {
-    await db.query('DELETE FROM beneficiaries WHERE id = $1', [id]);
+    await db.query('DELETE FROM animals WHERE id = $1', [id]);
   },
 
   async count() {
-    const rows = await db.query("SELECT COUNT(*) AS total FROM beneficiaries WHERE status != 'obito'");
+    const rows = await db.query("SELECT COUNT(*) AS total FROM animals WHERE status != 'obito'");
     return Number(rows[0].total);
   },
 
   async countBySpecies() {
     return db.query(
-      "SELECT species, COUNT(*) AS total FROM beneficiaries WHERE status != 'obito' GROUP BY species ORDER BY total DESC"
+      "SELECT species, COUNT(*) AS total FROM animals WHERE status != 'obito' GROUP BY species ORDER BY total DESC"
     );
   },
 
   async countByAdoptionStatus() {
     return db.query(
-      'SELECT status, COUNT(*) AS total FROM beneficiaries GROUP BY status ORDER BY total DESC'
+      'SELECT status, COUNT(*) AS total FROM animals GROUP BY status ORDER BY total DESC'
     );
   }
 };
 
-module.exports = Beneficiary;
+module.exports = Animal;

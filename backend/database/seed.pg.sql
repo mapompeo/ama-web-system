@@ -6,18 +6,18 @@
 DELETE FROM adoption_contracts;
 DELETE FROM animal_records;
 DELETE FROM activities;
-DELETE FROM beneficiaries;
+DELETE FROM animals;
 DELETE FROM users WHERE email NOT IN ('associacaoama25@gmail.com', 'matheus@teste.com');
 
 ALTER SEQUENCE users_id_seq RESTART WITH 3;
-ALTER SEQUENCE beneficiaries_id_seq RESTART WITH 1;
+ALTER SEQUENCE animals_id_seq RESTART WITH 1;
 ALTER SEQUENCE animal_records_id_seq RESTART WITH 1;
 ALTER SEQUENCE adoption_contracts_id_seq RESTART WITH 1;
 ALTER SEQUENCE activities_id_seq RESTART WITH 1;
 
 -- VOLUNTÁRIOS removidos (feature removida do projeto)
 
-INSERT INTO beneficiaries (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES
+INSERT INTO animals (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES
 ('Rex',       'Cachorro', 'Vira-lata',        'Macho',            'Médio',   '2022-03-10', 'disponivel',    'Carlos Souza',    '(47) 99201-0001', 'Vacinado e castrado. Encontrado no bairro Garcia'),
 ('Mel',       'Cachorro', 'Golden Retriever', 'Fêmea',            'Grande',  '2021-07-15', 'adotado',       'Ana Lima',        '(47) 99201-0002', 'Adotada em março de 2024 pela família Lima'),
 ('Bolinha',   'Gato',     'Persa',            'Macho',            'Pequeno', '2023-01-05', 'disponivel',    NULL,              NULL,              'Encontrado abandonado na Rua das Flores'),

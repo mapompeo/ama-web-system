@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const ctrl   = require('../controllers/BeneficiaryController');
+const ctrl   = require('../controllers/AnimalController');
 const contractCtrl = require('../controllers/AdoptionContractController');
 
 router.get('/',    ctrl.index);

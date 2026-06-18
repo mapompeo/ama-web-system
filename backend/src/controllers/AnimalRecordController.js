@@ -1,12 +1,12 @@
 const AnimalRecord = require('../models/AnimalRecord');
-const Beneficiary  = require('../models/Beneficiary');
+const Animal = require('../models/Animal');
 
 module.exports = {
   async index(req, res) {
     try {
       const { animal_id } = req.query;
       if (!animal_id) return res.status(400).json({ error: 'animal_id é obrigatório.' });
-      const animal = await Beneficiary.findById(animal_id);
+      const animal = await Animal.findById(animal_id);
       if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
       const records = await AnimalRecord.findByAnimal(animal_id);
       res.json({ animal, records });

@@ -2,6 +2,7 @@
 -- AMA Web System — Schema PostgreSQL (Supabase / Render)
 -- ============================================================
 
+DROP TABLE IF EXISTS beneficiaries CASCADE;
 DROP TABLE IF EXISTS volunteers CASCADE;
 
 CREATE TABLE IF NOT EXISTS users (
@@ -12,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS beneficiaries (
+CREATE TABLE IF NOT EXISTS animals (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   species VARCHAR(10) NOT NULL DEFAULT 'Cachorro' CHECK (species IN ('Cachorro','Gato','Outro')),
@@ -34,7 +35,7 @@ CREATE TABLE IF NOT EXISTS animal_records (
   description TEXT,
   record_date DATE NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (animal_id) REFERENCES beneficiaries(id) ON DELETE CASCADE
+  FOREIGN KEY (animal_id) REFERENCES animals(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS adoption_contracts (
@@ -43,7 +44,7 @@ CREATE TABLE IF NOT EXISTS adoption_contracts (
   filename VARCHAR(255) NOT NULL,
   original_name VARCHAR(255) NOT NULL,
   uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (animal_id) REFERENCES beneficiaries(id) ON DELETE CASCADE
+  FOREIGN KEY (animal_id) REFERENCES animals(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS activities (
@@ -63,7 +64,7 @@ INSERT INTO users (name, email, password) VALUES
 ('Matheus Pompeo', 'matheus@teste.com', '$2a$10$viCt0dgD4AzuQBqfFRg78e6UaW61FdguEviwF6l7HC1SxZaamogvi')
 ON CONFLICT (email) DO NOTHING;
 
-INSERT INTO beneficiaries (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES
+INSERT INTO animals (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES
 ('Rex', 'Cachorro', 'Vira-lata', 'Macho', 'Médio', '2022-03-10', 'disponivel', 'Carlos Souza', '(47) 99000-0010', 'Vacinado e castrado'),
 ('Mel', 'Cachorro', 'Golden Retriever', 'Fêmea', 'Grande', '2021-07-15', 'adotado', 'Ana Lima', '(47) 99000-0011', 'Adotada em março de 2024');
 

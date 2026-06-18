@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (f.size)    params.set('size',    f.size);
 
     try {
-      const result = await api.get(`/beneficiaries?${params}`);
+      const result = await api.get(`/animais?${params}`);
       renderTable(result.data);
       renderPagination(result.total, result.page, result.pages);
       const count = document.getElementById('record-count');
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (f.species) params.set('species', f.species);
       if (f.status)  params.set('status',  f.status);
       if (f.size)    params.set('size',    f.size);
-      const { data } = await api.get(`/beneficiaries?${params}`);
+      const { data } = await api.get(`/animais?${params}`);
       const STATUS_TEXT = { disponivel: 'Disponível', adotado: 'Adotado', em_tratamento: 'Em tratamento', obito: 'Óbito' };
       exportCSV(
         ['ID', 'Nome', 'Espécie', 'Raça', 'Sexo', 'Porte', 'Status', 'Responsável', 'Telefone', 'Observações'],
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.getElementById('del-confirm').addEventListener('click', async function () {
     try {
-      await api.delete(`/beneficiaries/${this.dataset.id}`);
+      await api.delete(`/animais/${this.dataset.id}`);
       sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg: 'Animal removido com sucesso.' }));
       window.location.reload();
     } catch (err) { showAlert('danger', 'Erro ao remover: ' + err.message); }

@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     row.querySelector('.delete-btn').addEventListener('click', async () => {
       if (!confirm('Remover este contrato?')) return;
       try {
-        await api.delete(`/beneficiaries/${id}/contract/${c.id}`);
+        await api.delete(`/animais/${id}/contract/${c.id}`);
         showToast('success', 'Contrato removido.');
         await loadContracts(id);
       } catch (err) {
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function loadContracts(animalId) {
     try {
-      const list = await api.get(`/beneficiaries/${animalId}/contract`);
+      const list = await api.get(`/animais/${animalId}/contract`);
       contractList.innerHTML = '';
       if (list.length === 0) {
         contractList.style.display = 'none';
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (id) {
     try {
-      const b = await api.get(`/beneficiaries/${id}`);
+      const b = await api.get(`/animais/${id}`);
       title.textContent = crumb.textContent = 'Editar Animal';
 
       document.getElementById('f-name').value              = b.name              || '';
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const fd = new FormData();
     fd.append('contract', file);
     try {
-      await fetch(`/api/beneficiaries/${id}/contract`, {
+      await fetch(`/api/animais/${id}/contract`, {
         method: 'POST', body: fd, credentials: 'include'
       });
       showToast('success', 'Contrato enviado com sucesso!');
@@ -130,8 +130,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
       let animalId = id;
-      if (id) { await api.put(`/beneficiaries/${id}`, data); }
-      else    { const saved = await api.post('/beneficiaries', data); animalId = saved.id; }
+      if (id) { await api.put(`/animais/${id}`, data); }
+      else    { const saved = await api.post('/animais', data); animalId = saved.id; }
 
       const msg = id ? 'Animal atualizado com sucesso!' : 'Animal cadastrado com sucesso!';
       sessionStorage.setItem('pendingToast', JSON.stringify({ type: 'success', msg }));
