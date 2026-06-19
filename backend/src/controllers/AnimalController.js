@@ -3,8 +3,8 @@ const Animal = require('../models/Animal');
 module.exports = {
   async index(req, res) {
     try {
-      const { page = 1, limit = 20, species, status, size, search } = req.query;
-      const result = await Animal.findAll({ page, limit, species, status, size, search });
+      const { page = 1, limit = 20, species, status, size, search, sortBy, order } = req.query;
+      const result = await Animal.findAll({ page, limit, species, status, size, search, sortBy, order });
       res.json(result);
     } catch (err) {
       res.status(500).json({ error: 'Erro ao buscar animais.' });

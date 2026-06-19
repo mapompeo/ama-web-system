@@ -1,7 +1,7 @@
 const db = require('../config/database');
 
 const Animal = {
-  async findAll({ page = 1, limit = 20, species, status, size, search } = {}) {
+  async findAll({ page = 1, limit = 20, species, status, size, search, sortBy, order } = {}) {
     const conditions = [];
     const params = [];
 
@@ -15,12 +15,16 @@ const Animal = {
 
     const where = conditions.length ? 'WHERE ' + conditions.join(' AND ') : '';
 
+    const ALLOWED_SORT = { id: 'id', name: 'name', species: 'species', sex: 'sex', size: 'size', responsible_name: 'responsible_name', status: 'status' };
+    const col = ALLOWED_SORT[sortBy] || 'name';
+    const dir = order === 'desc' ? 'DESC' : 'ASC';
+
     const countRows = await db.query(`SELECT COUNT(*) AS total FROM animals ${where}`, params);
     const total  = Number(countRows[0].total);
     const offset = (Number(page) - 1) * Number(limit);
 
     const data = await db.query(
-      `SELECT * FROM animals ${where} ORDER BY name LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+      `SELECT * FROM animals ${where} ORDER BY ${col} ${dir} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
       [...params, Number(limit), offset]
     );
 

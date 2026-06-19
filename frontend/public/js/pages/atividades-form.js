@@ -6,12 +6,61 @@ document.addEventListener('DOMContentLoaded', async () => {
   const crumb    = document.getElementById('crumb-action');
   const locInput = document.getElementById('f-location');
   const mapsBtn  = document.getElementById('maps-btn');
+  let selectedCoords = null;
 
   function updateMapsBtn() {
     const v = locInput.value.trim();
     mapsBtn.style.display = v ? '' : 'none';
-    mapsBtn.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v + ', Blumenau, SC');
+    mapsBtn.href = selectedCoords
+      ? `https://www.google.com/maps/search/?api=1&query=${selectedCoords.lat},${selectedCoords.lon}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v)}`;
   }
+
+  // ── Autocomplete (Nominatim / OpenStreetMap) ──────────────────
+  const inputGroup = locInput.closest('.input-group');
+  const suggestions = document.createElement('ul');
+  suggestions.className = 'location-suggestions';
+  inputGroup.appendChild(suggestions);
+
+  function hideSuggestions() { suggestions.innerHTML = ''; suggestions.hidden = true; }
+  hideSuggestions();
+
+  let acTimer;
+  locInput.addEventListener('input', () => {
+    selectedCoords = null;
+    updateMapsBtn();
+    clearTimeout(acTimer);
+    const q = locInput.value.trim();
+    if (q.length < 3) { hideSuggestions(); return; }
+
+    acTimer = setTimeout(async () => {
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&addressdetails=1&countrycodes=br&accept-language=pt-BR`;
+        const data = await (await fetch(url, { headers: { 'Accept-Language': 'pt-BR' } })).json();
+        if (!data.length) { hideSuggestions(); return; }
+
+        suggestions.innerHTML = '';
+        data.forEach(place => {
+          const parts  = place.display_name.split(',');
+          const name   = parts[0].trim();
+          const detail = parts.slice(1, 3).join(',').trim();
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${name}</strong>${detail ? `<span>${detail}</span>` : ''}`;
+          li.addEventListener('mousedown', e => {
+            e.preventDefault();
+            locInput.value = name;
+            selectedCoords = { lat: place.lat, lon: place.lon };
+            updateMapsBtn();
+            hideSuggestions();
+          });
+          suggestions.appendChild(li);
+        });
+        suggestions.hidden = false;
+      } catch { hideSuggestions(); }
+    }, 380);
+  });
+
+  locInput.addEventListener('blur', () => setTimeout(hideSuggestions, 150));
 
   if (id) {
     try {
@@ -28,8 +77,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.getElementById('loading').style.display = 'none';
   document.getElementById('content').style.display = '';
-
-  locInput.addEventListener('input', updateMapsBtn);
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
