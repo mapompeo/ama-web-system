@@ -117,13 +117,6 @@ Acesse: **http://localhost:3000**
 
 ---
 
-## Login (Contas de Teste)
-
-| E-mail | Senha |
-|--------|-------|
-| `associacaoama25@gmail.com` | `AMA@2025#OngPalmira` |
-| `matheus@teste.com` | `teste123` |
-
 ---
 
 ## Deploy (Produção)
