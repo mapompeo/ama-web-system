@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         ? `<a href="${mapsHref}" target="_blank" rel="noopener" class="text-decoration-none text-body d-flex align-items-center gap-1">
              <i class="bi bi-geo-alt-fill text-danger" style="font-size:.85rem;flex-shrink:0"></i>
              <span style="font-size:.83rem">${a.location}</span></a>`
-        : '—';
+        : '-';
       const st = STATUS_LABEL[a.status] || { label: a.status, cls: 'bg-secondary' };
       return `<tr>
         <td class="text-muted">${a.id}</td>
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       a.id,
       a.title,
       new Date(a.activity_date).toLocaleDateString('pt-BR'),
-      a.location || '—',
+      a.location || '-',
       (STATUS_LABEL[a.status] || { label: a.status }).label,
     ]);
     exportCSV(

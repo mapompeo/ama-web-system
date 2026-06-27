@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     cachedRecords = records;
 
     document.getElementById('crumb-name').textContent = animal.name;
-    document.getElementById('page-title').textContent = `Histórico — ${animal.name}`;
+    document.getElementById('page-title').textContent = `Histórico - ${animal.name}`;
 
     document.getElementById('animal-name').textContent = animal.name;
     document.getElementById('animal-details').textContent =

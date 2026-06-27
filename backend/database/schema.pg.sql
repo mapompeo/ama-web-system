@@ -1,5 +1,5 @@
 -- ============================================================
--- AMA Web System — Schema PostgreSQL (Supabase / Render)
+-- AMA Web System - Schema PostgreSQL (Supabase / Render)
 -- ============================================================
 
 DROP TABLE IF EXISTS beneficiaries CASCADE;

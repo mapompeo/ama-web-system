@@ -4,7 +4,7 @@
   <img src="frontend/public/images/ama-dashboard.png" width="800" alt="AMA Web System">
 </a>
 
-Sistema web desenvolvido para a **Associação Palmira Gobbi Amigo dos Amigos (AMA ONG)** — digitaliza o cadastro de animais e atividades em uma plataforma acessível pelo navegador.
+Sistema web desenvolvido para a **Associação Palmira Gobbi Amigo dos Amigos (AMA ONG)** - digitaliza o cadastro de animais e atividades em uma plataforma acessível pelo navegador.
 
 **Acesse:** [https://ama-web-system.onrender.com/](https://ama-web-system.onrender.com/)
 
@@ -102,8 +102,8 @@ JWT_SECRET=uma_chave_segura_aqui
 
 Execute no SQL Editor do Supabase (ou via psql):
 
-1. `backend/database/schema.pg.sql` — cria as tabelas + admin
-2. `backend/database/seed.pg.sql` — dados completos (opcional)
+1. `backend/database/schema.pg.sql` - cria as tabelas + admin
+2. `backend/database/seed.pg.sql` - dados completos (opcional)
 
 ### 5. Inicie o servidor
 
@@ -154,13 +154,13 @@ Hospedado em: **[https://ama-web-system.onrender.com/](https://ama-web-system.on
 
 - **Login e logout** com JWT, sessão persistente
 - **Dashboard** com estatísticas em tempo real (animais ativos, atividades agendadas, gráfico mensal, ações rápidas)
-- **Animais** — cadastro, edição, listagem e remoção com fotos; URLs amigáveis (`/animais/1`)
-- **Contratos de Adoção** — upload de PDF com múltiplos contratos por animal; visualização inline (modal com iframe) e download
-- **Histórico clínico** — registro de procedimentos por animal (`/historico/1`)
-- **Atividades** — cadastro, edição, listagem e remoção com filtros por status (Agendada/Realizada/Cancelada) e busca textual
+- **Animais** - cadastro, edição, listagem e remoção com fotos; URLs amigáveis (`/animais/1`)
+- **Contratos de Adoção** - upload de PDF com múltiplos contratos por animal; visualização inline (modal com iframe) e download
+- **Histórico clínico** - registro de procedimentos por animal (`/historico/1`)
+- **Atividades** - cadastro, edição, listagem e remoção com filtros por status (Agendada/Realizada/Cancelada) e busca textual
 - **Tema claro/escuro** com persistência em `localStorage`
-- **Interface responsiva** — adaptada para desktop, tablet e mobile com offcanvas sidebar, tabelas com scroll horizontal e cards em grid
-- **Rotas em português** — `/animais`, `/atividades`, `/historico`
+- **Interface responsiva** - adaptada para desktop, tablet e mobile com offcanvas sidebar, tabelas com scroll horizontal e cards em grid
+- **Rotas em português** - `/animais`, `/atividades`, `/historico`
 
 ---
 

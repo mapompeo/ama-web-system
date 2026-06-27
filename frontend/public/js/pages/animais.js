@@ -81,9 +81,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           <span>${b.species}</span>
           ${breed}
         </td>
-        <td>${b.sex || '—'}</td>
-        <td>${b.size || '—'}</td>
-        <td>${b.responsible_name || '<span class="text-muted">—</span>'}</td>
+        <td>${b.sex || '-'}</td>
+        <td>${b.size || '-'}</td>
+        <td>${b.responsible_name || '<span class="text-muted">-</span>'}</td>
         <td><span class="badge ${st.cls}">${st.label}</span></td>
         <td class="text-end" style="white-space:nowrap">
           <a href="/historico/${b.id}" class="btn btn-sm btn-outline-info me-1" title="Histórico"><i class="bi bi-clock-history"></i></a>
