@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS animals (
   responsible_name VARCHAR(100),
   responsible_phone VARCHAR(20),
   notes TEXT,
+  owner_id INT REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -54,14 +55,15 @@ CREATE TABLE IF NOT EXISTS activities (
   activity_date DATE NOT NULL,
   location VARCHAR(200),
   status VARCHAR(10) NOT NULL DEFAULT 'agendada' CHECK (status IN ('agendada', 'realizada', 'cancelada')),
+  owner_id INT REFERENCES users(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Admin: Maria (senha: AMA@2025#OngPalmira)
--- Teste: Matheus (senha: teste123)
+-- Demo:  Visitante (senha: Demo@AMA2026!)
 INSERT INTO users (name, email, password) VALUES
 ('Maria Eduarda', 'associacaoama25@gmail.com', '$2a$10$77Me64/Tg6hbuENCsUP0veA3Yaj/A0s0uFgGiz8iC6lv7btR17k.i'),
-('Matheus Pompeo', 'matheus@teste.com', '$2a$10$viCt0dgD4AzuQBqfFRg78e6UaW61FdguEviwF6l7HC1SxZaamogvi')
+('Visitante Demo', 'demo@ama.org.br', '$2a$10$YyLPvShxcoPj75WDVYlpe.QZ/QLPrLCicHvR7hgGG2rLaN.M.5fKC')
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO animals (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES
