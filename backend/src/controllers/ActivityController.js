@@ -48,6 +48,8 @@ module.exports = {
 
   async destroy(req, res) {
     try {
+      const activity = await Activity.findById(req.params.id, req.user.id);
+      if (!activity) return res.status(404).json({ error: 'Atividade não encontrada.' });
       await Activity.delete(req.params.id, req.user.id);
       res.json({ ok: true });
     } catch (err) {

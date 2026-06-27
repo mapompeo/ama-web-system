@@ -117,6 +117,15 @@ Acesse: **http://localhost:3000**
 
 ---
 
+## Credenciais de Demonstração
+
+| Perfil | E-mail | Senha |
+|--------|--------|-------|
+| Administrador | `associacaoama25@gmail.com` | `AMA@2025#OngPalmira` |
+| Visitante | `demo@ama.org.br` | `Demo@AMA2026!` |
+
+> As credenciais acima funcionam tanto no ambiente local quanto no deploy em produção.
+
 ---
 
 ## Deploy (Produção)

@@ -35,6 +35,12 @@ module.exports = {
       const { title, record_date } = req.body;
       if (!title?.trim()) return res.status(400).json({ error: 'Título é obrigatório.' });
       if (!record_date) return res.status(400).json({ error: 'Data é obrigatória.' });
+      // Verificar ownership do animal pai
+      const db = require('../config/database');
+      const rows = await db.query('SELECT animal_id FROM animal_records WHERE id = $1', [req.params.id]);
+      if (!rows[0]) return res.status(404).json({ error: 'Registro não encontrado.' });
+      const animal = await Animal.findById(rows[0].animal_id, req.user.id);
+      if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
       const id = await AnimalRecord.update(req.params.id, req.body);
       if (!id) return res.status(404).json({ error: 'Registro não encontrado.' });
       res.json({ id });
@@ -45,6 +51,11 @@ module.exports = {
 
   async destroy(req, res) {
     try {
+      const db = require('../config/database');
+      const rows = await db.query('SELECT animal_id FROM animal_records WHERE id = $1', [req.params.id]);
+      if (!rows[0]) return res.status(404).json({ error: 'Registro não encontrado.' });
+      const animal = await Animal.findById(rows[0].animal_id, req.user.id);
+      if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
       await AnimalRecord.delete(req.params.id);
       res.json({ ok: true });
     } catch (err) {

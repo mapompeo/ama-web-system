@@ -56,6 +56,8 @@ module.exports = {
       if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
       const contract = await AdoptionContract.findById(req.params.contractId);
       if (!contract) return res.status(404).json({ error: 'Contrato não encontrado.' });
+      // Garante que o contrato pertence ao animal do usuário logado
+      if (contract.animal_id != req.params.id) return res.status(404).json({ error: 'Contrato não encontrado.' });
       await AdoptionContract.delete(req.params.contractId);
       const filepath = path.join(uploadDir, contract.filename);
       if (fs.existsSync(filepath)) fs.unlinkSync(filepath);

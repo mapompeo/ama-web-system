@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS animals (
   responsible_name VARCHAR(100),
   responsible_phone VARCHAR(20),
   notes TEXT,
-  owner_id INT REFERENCES users(id) ON DELETE CASCADE,
+  owner_id INT REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS activities (
   activity_date DATE NOT NULL,
   location VARCHAR(200),
   status VARCHAR(10) NOT NULL DEFAULT 'agendada' CHECK (status IN ('agendada', 'realizada', 'cancelada')),
-  owner_id INT REFERENCES users(id) ON DELETE CASCADE,
+  owner_id INT REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

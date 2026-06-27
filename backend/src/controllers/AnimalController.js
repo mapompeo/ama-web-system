@@ -49,6 +49,8 @@ module.exports = {
 
   async destroy(req, res) {
     try {
+      const animal = await Animal.findById(req.params.id, req.user.id);
+      if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
       await Animal.delete(req.params.id, req.user.id);
       res.json({ ok: true });
     } catch (err) {
