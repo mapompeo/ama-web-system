@@ -1,6 +1,7 @@
 const path = require('path');
 const fs   = require('fs');
 const AdoptionContract = require('../models/AdoptionContract');
+const Animal = require('../models/Animal');
 
 const uploadDir = path.join(__dirname, '..', '..', 'uploads', 'contracts');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
@@ -8,6 +9,8 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 module.exports = {
   async show(req, res) {
     try {
+      const animal = await Animal.findById(req.params.id, req.user.id);
+      if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
       const contracts = await AdoptionContract.findByAnimal(req.params.id);
       res.json(contracts);
     } catch (err) {
@@ -17,6 +20,9 @@ module.exports = {
 
   async upload(req, res) {
     try {
+      const animal = await Animal.findById(req.params.id, req.user.id);
+      if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
+
       if (!req.files?.contract) {
         return res.status(400).json({ error: 'Nenhum arquivo enviado.' });
       }
@@ -46,6 +52,8 @@ module.exports = {
 
   async destroy(req, res) {
     try {
+      const animal = await Animal.findById(req.params.id, req.user.id);
+      if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
       const contract = await AdoptionContract.findById(req.params.contractId);
       if (!contract) return res.status(404).json({ error: 'Contrato não encontrado.' });
       await AdoptionContract.delete(req.params.contractId);

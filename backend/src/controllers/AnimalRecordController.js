@@ -6,7 +6,7 @@ module.exports = {
     try {
       const { animal_id } = req.query;
       if (!animal_id) return res.status(400).json({ error: 'animal_id é obrigatório.' });
-      const animal = await Animal.findById(animal_id);
+      const animal = await Animal.findById(animal_id, req.user.id);
       if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
       const records = await AnimalRecord.findByAnimal(animal_id);
       res.json({ animal, records });
@@ -21,6 +21,8 @@ module.exports = {
       if (!animal_id) return res.status(400).json({ error: 'animal_id é obrigatório.' });
       if (!title?.trim()) return res.status(400).json({ error: 'Título é obrigatório.' });
       if (!record_date) return res.status(400).json({ error: 'Data é obrigatória.' });
+      const animal = await Animal.findById(animal_id, req.user.id);
+      if (!animal) return res.status(404).json({ error: 'Animal não encontrado.' });
       const id = await AnimalRecord.create(req.body);
       res.status(201).json({ id });
     } catch (err) {

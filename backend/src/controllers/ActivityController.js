@@ -4,7 +4,7 @@ module.exports = {
   async index(req, res) {
     try {
       const { search, status } = req.query;
-      res.json(await Activity.findAll({ search, status }));
+      res.json(await Activity.findAll({ search, status, owner_id: req.user.id }));
     } catch (err) {
       res.status(500).json({ error: 'Erro ao buscar atividades.' });
     }
@@ -12,7 +12,7 @@ module.exports = {
 
   async show(req, res) {
     try {
-      const a = await Activity.findById(req.params.id);
+      const a = await Activity.findById(req.params.id, req.user.id);
       if (!a) return res.status(404).json({ error: 'Atividade não encontrada.' });
       res.json(a);
     } catch (err) {
@@ -25,8 +25,8 @@ module.exports = {
       const { title, activity_date } = req.body;
       if (!title?.trim())   return res.status(400).json({ error: 'Título é obrigatório.' });
       if (!activity_date)   return res.status(400).json({ error: 'Data é obrigatória.' });
-      const id = await Activity.create(req.body);
-      res.status(201).json(await Activity.findById(id));
+      const id = await Activity.create({ ...req.body, owner_id: req.user.id });
+      res.status(201).json(await Activity.findById(id, req.user.id));
     } catch (err) {
       res.status(500).json({ error: 'Erro ao cadastrar atividade.' });
     }
@@ -37,8 +37,10 @@ module.exports = {
       const { title, activity_date } = req.body;
       if (!title?.trim())   return res.status(400).json({ error: 'Título é obrigatório.' });
       if (!activity_date)   return res.status(400).json({ error: 'Data é obrigatória.' });
-      await Activity.update(req.params.id, req.body);
-      res.json(await Activity.findById(req.params.id));
+      await Activity.update(req.params.id, req.body, req.user.id);
+      const updated = await Activity.findById(req.params.id, req.user.id);
+      if (!updated) return res.status(404).json({ error: 'Atividade não encontrada.' });
+      res.json(updated);
     } catch (err) {
       res.status(500).json({ error: 'Erro ao atualizar atividade.' });
     }
@@ -46,7 +48,7 @@ module.exports = {
 
   async destroy(req, res) {
     try {
-      await Activity.delete(req.params.id);
+      await Activity.delete(req.params.id, req.user.id);
       res.json({ ok: true });
     } catch (err) {
       res.status(500).json({ error: 'Erro ao remover atividade.' });
