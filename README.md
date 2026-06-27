@@ -121,7 +121,7 @@ Acesse: **http://localhost:3000**
 
 | Perfil | E-mail | Senha |
 |--------|--------|-------|
-| Visitante | `demo@ama.org.br` | *(solicite ao responsável pelo projeto)* |
+| Visitante | `demo@ama.org.br` | 2bPIak1e6A;H |
 
 > Use o usuário acima para explorar o sistema. Os dados de demonstração são independentes dos dados reais da ONG.
 
