@@ -59,11 +59,11 @@ CREATE TABLE IF NOT EXISTS activities (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Admin: Maria (senha: AMA@2025#OngPalmira)
--- Demo:  Visitante (senha: Demo@AMA2026!)
+-- Admin: senha definida fora do repositório
+-- Demo:  Visitante (senha definida fora do repositório)
 INSERT INTO users (name, email, password) VALUES
-('Maria Eduarda', 'associacaoama25@gmail.com', '$2a$10$77Me64/Tg6hbuENCsUP0veA3Yaj/A0s0uFgGiz8iC6lv7btR17k.i'),
-('Visitante Demo', 'demo@ama.org.br', '$2a$10$YyLPvShxcoPj75WDVYlpe.QZ/QLPrLCicHvR7hgGG2rLaN.M.5fKC')
+('Administrador', 'associacaoama25@gmail.com', '$2a$10$RLYqBDZvhiDjPKnXON/IM.aGsMeVSvOIvbyeH.mIHuZs85u9Qzr02'),
+('Visitante Demo', 'demo@ama.org.br', '$2a$10$bg06B/tAgKnFcvisv9o6Be.CDqTuTEVRC6SnTctBUw0rdXwqd1iLq')
 ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO animals (name, species, breed, sex, size, birth_date, status, responsible_name, responsible_phone, notes) VALUES

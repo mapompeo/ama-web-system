@@ -121,10 +121,9 @@ Acesse: **http://localhost:3000**
 
 | Perfil | E-mail | Senha |
 |--------|--------|-------|
-| Administrador | `associacaoama25@gmail.com` | `AMA@2025#OngPalmira` |
-| Visitante | `demo@ama.org.br` | `Demo@AMA2026!` |
+| Visitante | `demo@ama.org.br` | *(solicite ao responsável pelo projeto)* |
 
-> As credenciais acima funcionam tanto no ambiente local quanto no deploy em produção.
+> Use o usuário acima para explorar o sistema. Os dados de demonstração são independentes dos dados reais da ONG.
 
 ---
 
