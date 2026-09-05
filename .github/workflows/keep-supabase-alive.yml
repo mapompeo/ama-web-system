@@ -2,8 +2,8 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    # Toda segunda-feira às 09:00 UTC (06:00 horário de Brasília)
-    - cron: '0 9 * * 1'
+    # Segunda e quinta-feira às 09:00 UTC (06:00 horário de Brasília)
+    - cron: '0 9 * * 1,4'
   workflow_dispatch: {} # permite rodar manualmente pelo GitHub também
 
 jobs:
