@@ -10,16 +10,15 @@ jobs:
   ping-supabase:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase REST API
+      - name: Ping Supabase Auth health endpoint
         run: |
           response=$(curl -s -o /dev/null -w "%{http_code}" \
-            "https://uqqyjpifsbupdnqejvnv.supabase.co/rest/v1/" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+            "https://uqqyjpifsbupdnqejvnv.supabase.co/auth/v1/health" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}")
 
           echo "Status HTTP: $response"
 
-          if [ "$response" -ge 200 ] && [ "$response" -lt 500 ]; then
+          if [ "$response" -eq 200 ]; then
             echo "✅ Supabase respondeu, projeto ativo."
           else
             echo "⚠️ Resposta inesperada do Supabase."
