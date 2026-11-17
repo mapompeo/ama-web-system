@@ -2,25 +2,49 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    # Segunda e quinta-feira às 09:00 UTC (06:00 horário de Brasília)
-    - cron: '0 9 * * 1,4'
+    # Todo dia às 09:00 UTC (06:00 horário de Brasília)
+    - cron: '0 9 * * *'
   workflow_dispatch: {} # permite rodar manualmente pelo GitHub também
+
+env:
+  PROJECT_REF: uqqyjpifsbupdnqejvnv
 
 jobs:
   ping-supabase:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase Auth health endpoint
+      # O plano free pausa o projeto sem atividade no banco. O /auth/v1/health
+      # não conta, e a Data API está desligada, então o ping passa pelo backend
+      # (Render), que roda uma consulta real no Postgres. Também acorda o Render.
+      - name: Consultar o banco pelo backend
+        id: ping
+        continue-on-error: true
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
-            "https://uqqyjpifsbupdnqejvnv.supabase.co/auth/v1/health" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}")
+          for i in 1 2 3 4 5; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 90 \
+              "https://ama-web-system.onrender.com/api/health")
+            echo "Tentativa $i: HTTP $status"
+            [ "$status" = "200" ] && exit 0
+            sleep 30
+          done
+          exit 1
 
-          echo "Status HTTP: $response"
-
-          if [ "$response" -eq 200 ]; then
-            echo "✅ Supabase respondeu, projeto ativo."
-          else
-            echo "⚠️ Resposta inesperada do Supabase."
+      # Se mesmo assim pausar, despausa pela Management API (precisa do secret
+      # SUPABASE_ACCESS_TOKEN, gerado em supabase.com/dashboard/account/tokens).
+      - name: Restaurar projeto pausado
+        if: steps.ping.outcome == 'failure'
+        env:
+          TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::Banco não respondeu e não há SUPABASE_ACCESS_TOKEN para restaurar."
             exit 1
           fi
+          api="https://api.supabase.com/v1/projects/${PROJECT_REF}"
+          state=$(curl -s "$api" -H "Authorization: Bearer $TOKEN" | jq -r .status)
+          echo "Status do projeto: $state"
+          if [ "$state" = "INACTIVE" ]; then
+            curl -sf -X POST "$api/restore" -H "Authorization: Bearer $TOKEN"
+            echo "Restauração solicitada."
+          fi
+          exit 1 # falha mesmo assim, para chegar e-mail avisando

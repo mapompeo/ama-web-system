@@ -23,6 +23,16 @@ const loginLimiter = rateLimit({
 });
 app.use('/api/auth/login', loginLimiter);
 
+// Usada pelo keep alive: consulta real no banco para o Supabase não pausar
+app.get('/api/health', async (req, res) => {
+  try {
+    await require('./config/database').query('SELECT 1 FROM animals LIMIT 1');
+    res.json({ ok: true });
+  } catch {
+    res.status(503).json({ ok: false });
+  }
+});
+
 app.use('/api/auth',          require('./routes/auth'));
 app.use('/api/dashboard',     require('./middlewares/auth'), require('./routes/index'));
 app.use('/api/animais', require('./middlewares/auth'), require('./routes/animals'));
